@@ -5,7 +5,6 @@ $(document).ready(function() {
 	var rows = board.rows.length;
 	var columns = board.rows[0].cells.length;
 
-
 	
 	function Snake(start) {
 		
@@ -14,10 +13,10 @@ $(document).ready(function() {
 
 		this.snakeLength = 5;
 
+		var oldDirection = "right";
 
-		//this.direction = "right"; doesn't work
 
-		var direction = "right"
+		var direction = "right";
 
 		this.snakeBody = [[this.currX,this.currY],[9,10],[8,10],[7,10],[6,10]];
 
@@ -30,19 +29,19 @@ $(document).ready(function() {
 
 		$(window).keydown(function(e) {
 			if (e.keyCode===87) {
-				if (direction!=="down") {
+				if (oldDirection!=="down") {
 					direction = "up";
 				}
 			} else if (e.keyCode===83) {
-				if (direction!=="up") {
+				if (oldDirection!=="up") {
 					direction = "down";
 				}
 			} else if (e.keyCode===68) {
-				if (direction!=="left") {
+				if (oldDirection!=="left") {
 					direction = "right";
 				}
 			} else if (e.keyCode===65) {
-				if (direction!=="right") {
+				if (oldDirection!=="right") {
 					direction = "left";
 				}
 			}
@@ -50,9 +49,17 @@ $(document).ready(function() {
 
 
 		this.updateSegments = function(X,Y) {
+			var currentPos = [X,Y].toString();
+			var foodPos = foodPosition.toString();
 			this.snakeBody.unshift([X,Y]);
-			var lastSeg = this.snakeBody.pop();
-			board.rows[lastSeg[1]].cells[lastSeg[0]].style.background = "#FFFFCC";
+			if (currentPos===foodPos) {
+				console.log("Snake length: " + this.snakeLength);
+				foodPosition = [(Math.floor((Math.random() * columns) + 1)),(Math.floor((Math.random() * rows) + 1))];
+				board.rows[foodPosition[1]].cells[foodPosition[0]].style.background = "red";
+			} else {
+				var lastSeg = this.snakeBody.pop();
+				board.rows[lastSeg[1]].cells[lastSeg[0]].style.background = "#FFFFCC";
+			}
 			//console.log(this.snakeBody);
 		}
 
@@ -86,16 +93,16 @@ $(document).ready(function() {
 			self = this;
 			setTimeout(function(){
 
-				//console.log(self);
 
 				var nextMove = self.nextCell();
+
+				oldDirection = direction;
 				
 				var nextX = nextMove[0];
 				var nextY = nextMove[1];
 
-				//console.log(nextX,nextY);
-
 				board.rows[nextY].cells[nextX].style.background = "black";
+
 
 
 				if (gameRunning===true) {
@@ -109,6 +116,15 @@ $(document).ready(function() {
 
 
 		//console.log(this);
+
+
+		
+		var foodPosition = [(Math.floor(Math.random() * columns)),(Math.floor(Math.random() * rows))];
+
+		//console.log("food:");
+		//console.log(foodPosition);
+
+		board.rows[foodPosition[1]].cells[foodPosition[0]].style.background = "red";
 
 		this.move();
 
