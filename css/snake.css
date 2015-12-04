@@ -1,0 +1,13 @@
+table {
+	background-color:#FFFFCC;
+	border-collapse:collapse;
+	border:1px solid #FFCC00;
+	color:#000000;
+	/*width:100%;*/
+}
+
+
+td {
+	height: 15px;
+	width: 15px;
+}
