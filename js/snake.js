@@ -26,7 +26,6 @@ $(document).ready(function() {
 			board.rows[segment[1]].cells[segment[0]].style.background = "black";
 		}
 
-
 		var self = this;
 
 		// Keypress event listeners
@@ -56,22 +55,17 @@ $(document).ready(function() {
 
 
 		// Move snake's position on board
-		this.updateSegments = function(X,Y) {
-			var currentPos = [X,Y].toString();
-			var foodPos = foodPosition.toString();
-			this.snakeBody.unshift([X,Y]);
-			if (currentPos===foodPos) {  // Snake eats food
-				foodPosition = [(Math.floor(Math.random() * columns)),(Math.floor(Math.random() * rows))];
-				
-				while (this.snakeBody.indexOf(foodPosition)!==-1) {  // To avoid placing food on top of snakes
-					foodPosition = [(Math.floor(Math.random() * columns)),(Math.floor(Math.random() * rows))];
-				}
-
-				board.rows[foodPosition[1]].cells[foodPosition[0]].style.background = "red";
+		this.updateSegments = function(nextX,nextY) {
+			var currentPos = [this.currX,this.currY].toString();
+			var foodPos1 = newGame.foodPosition1.toString();
+			this.snakeBody.unshift([this.currX,this.currY]);
+			if (currentPos===foodPos1) {  // When snake passes over food
+				newGame.generateFood();
 			} else {
 				var lastSeg = this.snakeBody.pop();
-				board.rows[lastSeg[1]].cells[lastSeg[0]].style.background = "#FFFFCC";
+				board.rows[lastSeg[1]].cells[lastSeg[0]].style.background = "#FFFFCC"; // Remove final segment of snake
 			}
+			board.rows[nextY].cells[nextX].style.background = "black"; // Display new position of head of snake
 		}
 
 
@@ -125,7 +119,7 @@ $(document).ready(function() {
 		}
 
 
-		// Move head of snake
+		// Move snake
 		this.move = function() {
 			setTimeout(function(){
 
@@ -138,17 +132,13 @@ $(document).ready(function() {
 					var nextX = nextCell[0];
 					var nextY = nextCell[1];
 
-					self.updateSegments(self.currX,self.currY);
-
-					board.rows[nextY].cells[nextX].style.background = "black";
+					self.updateSegments(nextX,nextY);
 
 					self.snakeLength++;
 				} else {
 					alert("Game over");
 					gameRunning = false;
 				}
-
-				
 
 				if (gameRunning===true) {
 					self.move();
@@ -159,10 +149,6 @@ $(document).ready(function() {
 
 		var gameRunning = true;
 
-		var foodPosition = [(Math.floor(Math.random() * columns)),(Math.floor(Math.random() * rows))];
-
-		board.rows[foodPosition[1]].cells[foodPosition[0]].style.background = "red";
-
 		this.move();
 
 	}
@@ -170,6 +156,20 @@ $(document).ready(function() {
 
 	function Game(start) {
 		var snake = new Snake(start);
+
+		//this.occupiedCells = [];
+
+		this.foodPosition1;
+
+		this.generateFood = function() {
+			this.foodPosition1 = [(Math.floor(Math.random() * columns)),(Math.floor(Math.random() * rows))];
+			while (snake.snakeBody.indexOf(this.foodPosition1)!==-1) {  // To avoid placing food on top of snakes
+				this.foodPosition1 = [(Math.floor(Math.random() * columns)),(Math.floor(Math.random() * rows))];
+			}
+			board.rows[this.foodPosition1[1]].cells[this.foodPosition1[0]].style.background = "red"; // Display new position of food
+		}
+		
+		this.generateFood();
 	}
 
 
