@@ -17,8 +17,6 @@ $(document).ready(function() {
 
 		this.moves = ["right"];
 
-		var direction = "right";
-
 		this.snakeBody = [[this.currX,this.currY],[9,10],[8,10],[7,10],[6,10]];
 
 
@@ -31,8 +29,6 @@ $(document).ready(function() {
 		var self = this;
 
 		$(window).keydown(function(e) {
-			console.log(self.moves.length);
-			console.log(self.moves);
 			currDir = null;
 			if (self.moves.length===0) {
 				currDir = oldDirection;
@@ -57,33 +53,11 @@ $(document).ready(function() {
 		});
 
 
-		/*$(window).keydown(function(e) {
-			if (e.keyCode===87) {
-				if (oldDirection!=="down") {
-					direction = "up";
-				}
-			} else if (e.keyCode===83) {
-				if (oldDirection!=="up") {
-					direction = "down";
-				}
-			} else if (e.keyCode===68) {
-				if (oldDirection!=="left") {
-					direction = "right";
-				}
-			} else if (e.keyCode===65) {
-				if (oldDirection!=="right") {
-					direction = "left";
-				}
-			}
-		});*/
-
-
 		this.updateSegments = function(X,Y) {
 			var currentPos = [X,Y].toString();
 			var foodPos = foodPosition.toString();
 			this.snakeBody.unshift([X,Y]);
-			if (currentPos===foodPos) {
-				console.log("Snake length: " + this.snakeLength);
+			if (currentPos===foodPos) {  // Snake eats food
 				foodPosition = [(Math.floor(Math.random() * columns)),(Math.floor(Math.random() * rows))];
 				
 				while (this.snakeBody.indexOf(foodPosition)!==-1) {  // To avoid placing food on top of snakes
@@ -107,47 +81,56 @@ $(document).ready(function() {
 		}
 
 
-		this.nextCell = function(dir) {
+		this.getNextCell = function(dir) {
 			switch (dir) {
 				case "up":
 					this.currY -= 1;
-					this.updateSegments(this.currX,this.currY);
-					return [this.currX,this.currY];
 					break;
 				case "down":
 					this.currY += 1;
-					this.updateSegments(this.currX,this.currY);
-					return [this.currX,this.currY];
 					break;
 				case "right":
 					this.currX += 1;
-					this.updateSegments(this.currX,this.currY);
-					return [this.currX,this.currY];
 					break;
 				case "left":
 					this.currX -= 1;
-					this.updateSegments(this.currX,this.currY);
-					return [this.currX,this.currY];
+			}
+			return [this.currX,this.currY];
+
+		}
+
+
+		this.isValid = function(cell) {
+			var valid = false;
+			if (cell[0]>=0&&cell[0]<columns&&cell[1]>=0&&cell[1]<rows) {
+				return true;
 			}
 		}
 
 
 		this.move = function() {
-			//self = this;
 			setTimeout(function(){
 
-
 				var newDirection = self.getNextMove();
-				var nextMove = self.nextCell(newDirection);
+				var nextCell = self.getNextCell(newDirection);
 
-				oldDirection = newDirection;
+				if (self.isValid(nextCell)) {
+					oldDirection = newDirection;
+					
+					var nextX = nextCell[0];
+					var nextY = nextCell[1];
+
+					self.updateSegments(self.currX,self.currY);
+
+					board.rows[nextY].cells[nextX].style.background = "black";
+
+					self.snakeLength++;
+				} else {
+					alert("Game over");
+					gameRunning = false;
+				}
+
 				
-				var nextX = nextMove[0];
-				var nextY = nextMove[1];
-
-				board.rows[nextY].cells[nextX].style.background = "black";
-
-
 
 				if (gameRunning===true) {
 					self.move();
@@ -158,31 +141,21 @@ $(document).ready(function() {
 
 		var gameRunning = true;
 
-
-		
 		var foodPosition = [(Math.floor(Math.random() * columns)),(Math.floor(Math.random() * rows))];
-
-		//console.log("food:");
-		//console.log(foodPosition);
 
 		board.rows[foodPosition[1]].cells[foodPosition[0]].style.background = "red";
 
 		this.move();
-
-
 
 	}
 
 
 	function Game(start) {
 		var snake = new Snake(start);
-
 	}
 
 
 	var newGame = new Game([10,10]);
-
-
 
 })
 
