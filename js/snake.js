@@ -6,6 +6,16 @@ $(document).ready(function() {
 	var columns = board.rows[0].cells.length;
 
 	
+	function checkTailCollision(body, cell) {
+	    for (var i = 0; i < body.length; i++) {
+	        if (body[i][0] == cell[0] && body[i][1] == cell[1]) {
+	            return true;
+	        }
+	    }
+	    return false;
+	}
+
+
 	function Snake(start) {
 		
 		this.currX = start[0];
@@ -102,7 +112,7 @@ $(document).ready(function() {
 
 		this.isValid = function(cell) {
 			var valid = false;
-			if (cell[0]>=0&&cell[0]<columns&&cell[1]>=0&&cell[1]<rows) {
+			if (cell[0]>=0&&cell[0]<columns&&cell[1]>=0&&cell[1]<rows && !checkTailCollision(this.snakeBody,cell)) {
 				return true;
 			}
 		}
