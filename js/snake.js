@@ -7,18 +7,21 @@ $(document).ready(function() {
 	
 	var columnCount = 50;
 	var rowCount = 35;
-	var row;
-	for (var i = 1; i < rowCount; i++) {
-		row = table.insertRow(-1);
+	for (var i = 0; i < rowCount; i++) {
+		var row = table.insertRow(-1);
 		for (var j = 0; j < columnCount; j++) {
 			var cell = row.insertCell(-1);
+			cell.id = j.toString() + "-" + i.toString();
+			console.log(cell.id);
 		}
 	}
 
-	var container = document.getElementById("boardcontainer");
-	container.innerHTML = "";
-	container.appendChild(table);
+	// Want to wait here until table is loaded
 
+	//var coor = JSON.parse("[" + string + "]");
+
+	var container = document.getElementById("boardcontainer");
+	container.appendChild(table);
 
 
 	var board = document.getElementById("board");
