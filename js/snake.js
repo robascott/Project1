@@ -11,18 +11,15 @@ $(document).ready(function() {
 		var row = table.insertRow(-1);
 		for (var j = 0; j < columnCount; j++) {
 			var cell = row.insertCell(-1);
-			cell.id = j.toString() + "-" + i.toString();
-			console.log(cell.id);
+			cell.id = j.toString() + "-" + i.toString(); //var coor = JSON.parse("[" + string + "]");
 		}
 	}
 
-	// Want to wait here until table is loaded
-
-	//var coor = JSON.parse("[" + string + "]");
+	// Wait until table is loaded
+	$("#board").waitUntilExists(startGame);
 
 	var container = document.getElementById("boardcontainer");
 	container.appendChild(table);
-
 
 	var board = document.getElementById("board");
 
@@ -215,19 +212,22 @@ $(document).ready(function() {
 	}
 
 
-	var placedItems = [];
+	function startGame() {
+		placedItems = [];
 
+		food1 = new Food([10,15]);
+		food2 = new Food([30,30]);
 
-	var food1 = new Food([10,15]);
-	var food2 = new Food([30,30]);
+		placedItems.push([10,15]);
+		placedItems.push([10,15]);
 
-	placedItems.push([10,15]);
-	placedItems.push([10,15]);
+		board.rows[15].cells[10].style.background = "red";
+		board.rows[30].cells[30].style.background = "red";
 
-	board.rows[15].cells[10].style.background = "red";
-	board.rows[30].cells[30].style.background = "red";
+		snake1 = new Snake([5,20]);
+	}
 
-	var snake1 = new Snake([5,20]);
+	
 
 	//var newGame = new Game([5,20]);
 
