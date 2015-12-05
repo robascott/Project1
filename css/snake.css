@@ -11,3 +11,10 @@ td {
 	height: 15px;
 	width: 15px;
 }
+
+
+
+.snake {
+	border-radius: 3px;
+	background-color: black;
+}

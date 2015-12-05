@@ -1,5 +1,26 @@
 $(document).ready(function() {
 	
+	//Create a HTML Table element.
+	var table = document.createElement("TABLE");
+	table.id = "board";
+	table.border = "1";
+	
+	var columnCount = 50;
+	var rowCount = 35;
+	var row;
+	for (var i = 1; i < rowCount; i++) {
+		row = table.insertRow(-1);
+		for (var j = 0; j < columnCount; j++) {
+			var cell = row.insertCell(-1);
+		}
+	}
+
+	var container = document.getElementById("boardcontainer");
+	container.innerHTML = "";
+	container.appendChild(table);
+
+
+
 	var board = document.getElementById("board");
 
 	// Board dimensions
