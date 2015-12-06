@@ -1,6 +1,6 @@
 $(document).ready(function() {
 	
-	//Create a HTML Table element.
+	//Create board
 	var table = document.createElement("TABLE");
 	table.id = "board";
 	table.border = "1";
@@ -34,6 +34,10 @@ $(document).ready(function() {
 		this.currY = start[1];
 
 		this.loopTime = 100;
+
+		this.currentPowerup;
+		this.powerupActive = false;
+		this.powerupTimer = 0;
 
 		this.snakeLength = 16;
 		this.snakeBody = [[this.currX,this.currY]]
@@ -95,8 +99,10 @@ $(document).ready(function() {
 				food2.generateFood();
 			} else if (currentPos===powerUpPos) {
 				$(posToId(powerUpTest.position)).toggleClass("speed");
-				powerUpTest.activatePowerUp(snake1);
+				powerUpTest.activatePowerup(snake1);
 				removeFromBoard(powerUpTest.position);
+				this.currentPowerup = powerUpTest;
+				this.powerupActive = true;
 			} else {
 				var lastSeg = this.snakeBody.pop();
 				$(posToId([lastSeg[0],lastSeg[1]])).toggleClass("snake"); // Remove final segment of snake
@@ -186,6 +192,14 @@ $(document).ready(function() {
 					gameRunning = false;
 				}
 
+				if (self.powerupActive) {
+					if (self.powerupTimer>=10000) {
+						self.powerupActive = false;
+						self.currentPowerup.deactivatePowerup(snake1);
+					}
+					self.powerupTimer += self.loopTime;
+				}
+
 				if (gameRunning===true) {
 					self.move();
 				}
@@ -212,13 +226,13 @@ $(document).ready(function() {
 	}
 
 
-	var PowerUp = function(snake) {
+	var Powerup = function(snake) {
 		this.position;
 		this.powerType;
 
 		var types = ["speed","shrink","invincible"];
 
-		this.generatePowerUp = function() {
+		this.generatePowerup = function() {
 			//var rand = types[((Math.random() * (2 - 0 + 1) ) << 0)];
 			var type = types[0];
 			switch (type) {
@@ -236,11 +250,10 @@ $(document).ready(function() {
 			placedItems.push(this.position);
 		}
 
-		this.activatePowerUp = function(snake) {
+		this.activatePowerup = function(snake) {
 			switch (this.powerType) {
 				case "speed":
 					snake.loopTime -= 50;
-					console.log(snake.loopTime);
 					break;
 				case "shrink":
 					//
@@ -249,6 +262,19 @@ $(document).ready(function() {
 					//
 			}
 
+		}
+
+		this.deactivatePowerup = function(snake) {
+			switch (this.powerType) {
+				case "speed":
+					snake.loopTime = 100;
+					break;
+				case "shrink":
+					//
+					break;
+				case "invincible":
+					//
+			}
 		}
 
 
@@ -285,7 +311,6 @@ $(document).ready(function() {
 	function findIndex(array,item) {
 		for (var i = 0; i < array.length; i++) {
 		    if (array[i][0] == item[0] && array[i][1] == item[1]) {
-		        console.log("found");
 		        return i;
 		    }
 		}
@@ -293,8 +318,6 @@ $(document).ready(function() {
 	}
 
 	function removeFromBoard(pos) { // not working
-		console.log(placedItems);
-		console.log(pos);
 		index = findIndex(placedItems,pos);
 		if (index > -1) {
 		    placedItems.splice(index, 1);
@@ -302,6 +325,7 @@ $(document).ready(function() {
 	}
 
 
+	// Set up snakes, food and power-ups
 	function startGame() {
 
 		placedItems = [];
@@ -314,10 +338,9 @@ $(document).ready(function() {
 		food1.generateFood();
 		food2.generateFood();
 
-		powerUpTest = new PowerUp();
-		powerUpTest.generatePowerUp();
+		powerUpTest = new Powerup();
+		powerUpTest.generatePowerup();
 
-		console.log(placedItems);
 	}
 
 	
