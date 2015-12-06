@@ -204,6 +204,12 @@ $(document).ready(function() {
 	}
 
 
+	function idToPos(id) {
+		var splitPos = id.split("-");
+		return [parseInt(splitPos[0]),parseInt(splitPos[1])];
+	}
+
+
 	function removeElement(pos) {
 		index = placedItems.indexOf(pos);
 		if (index > -1) {
@@ -213,6 +219,8 @@ $(document).ready(function() {
 
 
 	function startGame() {
+		//$("#15-20").css("background-color","blue");
+
 		placedItems = [];
 
 		food1 = new Food([10,15]);
