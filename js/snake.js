@@ -88,7 +88,9 @@ $(document).ready(function() {
 			var currentPos = [this.currX,this.currY].toString();
 			var foodPos1 = food1.position.toString();
 			var foodPos2 = food2.position.toString();
-			var powerUpPos = powerUpTest.position.toString();
+			var powerupPos1 = powerup1.position.toString();
+			var powerupPos2 = powerup2.position.toString();
+			//var powerUpPos = powerUpTest.position.toString();
 			this.snakeBody.unshift([this.currX,this.currY]);
 			if (currentPos===foodPos1) {  // When snake passes over food
 				$(posToId(food1.position)).toggleClass("food");
@@ -98,12 +100,26 @@ $(document).ready(function() {
 				$(posToId(food2.position)).toggleClass("food");
 				removeFromBoard(food2.position);
 				food2.generateFood();
-			} else if (currentPos===powerUpPos) {
-				$(posToId(powerUpTest.position)).toggleClass("invincible");
-				powerUpTest.activatePowerup(snake1);
-				removeFromBoard(powerUpTest.position);
-				this.currentPowerup = powerUpTest;
+			} else if (currentPos===powerupPos1 && !this.powerupActive) {
+				console.log("contact1: " + currentPos + " " + powerupPos1);
+				$(posToId(powerup1.position)).toggleClass(powerup1.powerType);
+				powerup1.activatePowerup(snake1); // change snake1
+				removeFromBoard(powerup1.position);
+				this.currentPowerup = powerup1;
 				this.powerupActive = true;
+				setTimeout(function() {
+					powerup1.generatePowerup()
+				},5000);
+			} else if (currentPos===powerupPos2 && !this.powerupActive) {
+				console.log("contact2: " + currentPos + " " + powerupPos2);
+				$(posToId(powerup2.position)).toggleClass(powerup2.powerType);
+				powerup2.activatePowerup(snake1); // change snake1
+				removeFromBoard(powerup2.position);
+				this.currentPowerup = powerup2;
+				this.powerupActive = true;
+				setTimeout(function() {
+					powerup2.generatePowerup();
+				},5000);
 			} else {
 				var lastSeg = this.snakeBody.pop();
 				$(posToId([lastSeg[0],lastSeg[1]])).toggleClass("snake"); // Remove final segment of snake
@@ -198,9 +214,10 @@ $(document).ready(function() {
 				}
 
 				if (self.powerupActive) {
-					if (self.powerupTimer>=10000) {
+					if (self.powerupTimer>=2000) {
 						self.powerupActive = false;
 						self.currentPowerup.deactivatePowerup(snake1);
+						self.powerupTimer = 0;
 					}
 					self.powerupTimer += self.loopTime;
 				}
@@ -235,14 +252,13 @@ $(document).ready(function() {
 		this.position;
 		this.powerType;
 
-		var types = ["speed","shrink","invincible"];
+		var types = ["speed","invincible","shrink"];
 
 		this.generatePowerup = function() {
-			//var rand = types[((Math.random() * (2 - 0 + 1) ) << 0)];
-			var type = types[2];
-			switch (type) {
+			var rand = types[((Math.random() * (1 - 0 + 1) ) << 0)]; // change first '1' to '2'
+			switch (rand) {
 				case "speed":
-					this.powerType = type;
+					this.powerType = rand;
 					this.position = generatePosition();
 					$(posToId([this.position[0],this.position[1]])).toggleClass("speed");
 					break;
@@ -250,7 +266,7 @@ $(document).ready(function() {
 					//
 					break;
 				case "invincible":
-					this.powerType = type;
+					this.powerType = rand;
 					this.position = generatePosition();
 					$(posToId([this.position[0],this.position[1]])).toggleClass("invincible");
 			}
@@ -345,8 +361,10 @@ $(document).ready(function() {
 		food1.generateFood();
 		food2.generateFood();
 
-		powerUpTest = new Powerup();
-		powerUpTest.generatePowerup();
+		powerup1 = new Powerup();
+		powerup1.generatePowerup();
+		powerup2 = new Powerup();
+		powerup2.generatePowerup();
 
 	}
 
