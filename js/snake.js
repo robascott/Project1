@@ -44,7 +44,8 @@ $(document).ready(function() {
 
 		for (i=0; i<this.snakeLength; i++) {  // Colour snake
 			var segment = this.snakeBody[i];
-			board.rows[segment[1]].cells[segment[0]].style.background = "black";
+			$(posToId([segment[0],segment[1]])).toggleClass("snake");
+			//board.rows[segment[1]].cells[segment[0]].style.background = "black";
 		}
 
 		var self = this;
@@ -82,16 +83,19 @@ $(document).ready(function() {
 			var foodPos2 = food2.position.toString();
 			this.snakeBody.unshift([this.currX,this.currY]);
 			if (currentPos===foodPos1) {  // When snake passes over food
+				$(posToId(food1.position)).toggleClass("food");
+				removeElement(foodPos1); // CHANGE THIS
 				food1.generateFood();
-				removeElement(foodPos1);
 			} else if (currentPos===foodPos2) {
+				console.log(foodPos2);
+				$(posToId(food2.position)).toggleClass("food");
+				removeElement(foodPos2); // CHANGE THIS
 				food2.generateFood();
-				removeElement(foodPos2);
 			} else {
 				var lastSeg = this.snakeBody.pop();
-				board.rows[lastSeg[1]].cells[lastSeg[0]].style.background = "#FFFFCC"; // Remove final segment of snake
+				$(posToId([lastSeg[0],lastSeg[1]])).toggleClass("snake"); // Remove final segment of snake
 			}
-			board.rows[nextY].cells[nextX].style.background = "black"; // Display new position of head of snake
+			$(posToId([nextX,nextY])).toggleClass("snake"); // Display new position of head of snake
 		}
 
 
@@ -172,7 +176,7 @@ $(document).ready(function() {
 
 					self.snakeLength++;
 				} else {
-					alert("Game over");
+					console.log("Game over");
 					gameRunning = false;
 				}
 
@@ -199,18 +203,23 @@ $(document).ready(function() {
 			while (snake1.checkOverlap(this.position) || placedItems.indexOf(this.position)!==-1) {  // To avoid placing food on top of snakes
 				this.position = [(Math.floor(Math.random() * columns)),(Math.floor(Math.random() * rows))];
 			}
-			board.rows[this.position[1]].cells[this.position[0]].style.background = "red"; // Display food
+			console.log(this.position[0],this.position[1]);
+			$(posToId([this.position[0],this.position[1]])).toggleClass("food");  // Display food
 		}
 	}
 
 
-	function idToPos(id) {
-		var splitPos = id.split("-");
+	function idToPos(id) {  // Not needed atm
+		var splitPos = idString.split("-");
 		return [parseInt(splitPos[0]),parseInt(splitPos[1])];
 	}
 
+	function posToId(pos) {
+		return "#" + pos[0] + "-" + pos[1];
+	}
 
-	function removeElement(pos) {
+
+	function removeElement(pos) { // DOESN'T WORK WITH ARRAY OF ARRAYS
 		index = placedItems.indexOf(pos);
 		if (index > -1) {
 		    placedItems.splice(index, 1);
@@ -219,18 +228,22 @@ $(document).ready(function() {
 
 
 	function startGame() {
-		//$("#15-20").css("background-color","blue");
+		//$("#1-20").css("background-color","blue");
 
 		placedItems = [];
 
-		food1 = new Food([10,15]);
-		food2 = new Food([30,30]);
+		var foodInit1 = [10,15];
+		var foodInit2 = [30,30];
 
-		placedItems.push([10,15]);
-		placedItems.push([10,15]);
+		food1 = new Food(foodInit1);
+		food2 = new Food(foodInit2);
 
-		board.rows[15].cells[10].style.background = "red";
-		board.rows[30].cells[30].style.background = "red";
+		placedItems.push(foodInit1);
+		placedItems.push(foodInit2);
+
+
+		$(posToId(foodInit1)).toggleClass("food");
+		$(posToId(foodInit2)).toggleClass("food");
 
 		snake1 = new Snake([5,20]);
 	}
