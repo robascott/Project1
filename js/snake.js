@@ -11,7 +11,7 @@ $(document).ready(function() {
 		var row = table.insertRow(-1);
 		for (var j = 0; j < columnCount; j++) {
 			var cell = row.insertCell(-1);
-			cell.id = j.toString() + "-" + i.toString(); //var coor = JSON.parse("[" + string + "]");
+			cell.id = j.toString() + "-" + i.toString();
 		}
 	}
 
@@ -32,6 +32,8 @@ $(document).ready(function() {
 		
 		this.currX = start[0];
 		this.currY = start[1];
+
+		this.loopTime = 100;
 
 		this.snakeLength = 16;
 		this.snakeBody = [[this.currX,this.currY]]
@@ -81,16 +83,20 @@ $(document).ready(function() {
 			var currentPos = [this.currX,this.currY].toString();
 			var foodPos1 = food1.position.toString();
 			var foodPos2 = food2.position.toString();
+			var powerUpPos = powerUpTest.position.toString();
 			this.snakeBody.unshift([this.currX,this.currY]);
 			if (currentPos===foodPos1) {  // When snake passes over food
 				$(posToId(food1.position)).toggleClass("food");
 				removeElement(foodPos1); // CHANGE THIS
 				food1.generateFood();
 			} else if (currentPos===foodPos2) {
-				console.log(foodPos2);
 				$(posToId(food2.position)).toggleClass("food");
 				removeElement(foodPos2); // CHANGE THIS
 				food2.generateFood();
+			} else if (currentPos===powerUpPos) {
+				$(posToId(powerUpTest.position)).toggleClass("speed");
+				powerUpTest.activatePowerUp(snake1);
+				removeElement(powerUpPos); // CHANGE THIS
 			} else {
 				var lastSeg = this.snakeBody.pop();
 				$(posToId([lastSeg[0],lastSeg[1]])).toggleClass("snake"); // Remove final segment of snake
@@ -183,7 +189,7 @@ $(document).ready(function() {
 				if (gameRunning===true) {
 					self.move();
 				}
-			}, 100);
+			}, self.loopTime);
 
 		}
 
@@ -199,13 +205,68 @@ $(document).ready(function() {
 		this.position = pos;
 
 		this.generateFood = function() {
-			this.position = [(Math.floor(Math.random() * columns)),(Math.floor(Math.random() * rows))];
-			while (snake1.checkOverlap(this.position) || placedItems.indexOf(this.position)!==-1) {  // To avoid placing food on top of snakes
-				this.position = [(Math.floor(Math.random() * columns)),(Math.floor(Math.random() * rows))];
-			}
-			console.log(this.position[0],this.position[1]);
+			this.position = generatePosition();
 			$(posToId([this.position[0],this.position[1]])).toggleClass("food");  // Display food
 		}
+
+		// this.generateFood = function() {
+		// 	this.position = [(Math.floor(Math.random() * columns)),(Math.floor(Math.random() * rows))];
+		// 	while (snake1.checkOverlap(this.position) || placedItems.indexOf(this.position)!==-1) {  // To avoid placing food on top of snakes
+		// 		this.position = [(Math.floor(Math.random() * columns)),(Math.floor(Math.random() * rows))];
+		// 	}
+		// 	$(posToId([this.position[0],this.position[1]])).toggleClass("food");  // Display food
+		// }
+	}
+
+
+	var PowerUp = function(snake) {
+		this.position;
+		this.powerType;
+
+		var types = ["speed","shrink","invincible"];
+
+		this.generatePowerUp = function() {
+			//var rand = types[((Math.random() * (2 - 0 + 1) ) << 0)];
+			var type = types[0];
+			switch (type) {
+				case "speed":
+					this.powerType = type;
+					this.position = generatePosition();
+					$(posToId([this.position[0],this.position[1]])).toggleClass("speed");
+					break;
+				case "shrink":
+					//
+					break;
+				case "invincible":
+					//
+			}
+		}
+
+		this.activatePowerUp = function(snake) {
+			switch (this.powerType) {
+				case "speed":
+					snake.loopTime -= 50;
+					console.log(snake.loopTime);
+					break;
+				case "shrink":
+					//
+					break;
+				case "invincible":
+					//
+			}
+
+		}
+
+
+	}
+
+
+	function generatePosition() {
+		var pos = [(Math.floor(Math.random() * columns)),(Math.floor(Math.random() * rows))];
+		while (snake1.checkOverlap(pos) || placedItems.indexOf(pos)!==-1) {  // To avoid placing food on top of snakes
+			pos = [(Math.floor(Math.random() * columns)),(Math.floor(Math.random() * rows))];
+		}
+		return pos;
 	}
 
 
@@ -219,6 +280,7 @@ $(document).ready(function() {
 	}
 
 
+
 	function removeElement(pos) { // DOESN'T WORK WITH ARRAY OF ARRAYS
 		index = placedItems.indexOf(pos);
 		if (index > -1) {
@@ -228,7 +290,6 @@ $(document).ready(function() {
 
 
 	function startGame() {
-		//$("#1-20").css("background-color","blue");
 
 		placedItems = [];
 
@@ -246,6 +307,9 @@ $(document).ready(function() {
 		$(posToId(foodInit2)).toggleClass("food");
 
 		snake1 = new Snake([5,20]);
+
+		powerUpTest = new PowerUp();
+		powerUpTest.generatePowerUp();
 	}
 
 	
