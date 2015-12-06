@@ -39,6 +39,8 @@ $(document).ready(function() {
 		this.powerupActive = false;
 		this.powerupTimer = 0;
 
+		this.invincible = false;
+
 		this.snakeLength = 16;
 		this.snakeBody = [[this.currX,this.currY]]
 		this.moves = ["down"];
@@ -51,7 +53,6 @@ $(document).ready(function() {
 		for (i=0; i<this.snakeLength; i++) {  // Colour snake
 			var segment = this.snakeBody[i];
 			$(posToId([segment[0],segment[1]])).toggleClass("snake");
-			//board.rows[segment[1]].cells[segment[0]].style.background = "black";
 		}
 
 		var self = this;
@@ -98,7 +99,7 @@ $(document).ready(function() {
 				removeFromBoard(food2.position);
 				food2.generateFood();
 			} else if (currentPos===powerUpPos) {
-				$(posToId(powerUpTest.position)).toggleClass("speed");
+				$(posToId(powerUpTest.position)).toggleClass("invincible");
 				powerUpTest.activatePowerup(snake1);
 				removeFromBoard(powerUpTest.position);
 				this.currentPowerup = powerUpTest;
@@ -121,7 +122,7 @@ $(document).ready(function() {
 		}
 
 
-		// Return next position of snake haid
+		// Return next position of snake head
 		this.getNextCell = function(dir) {
 			switch (dir) {
 				case "up":
@@ -140,7 +141,7 @@ $(document).ready(function() {
 		}
 
 
-		// Check for collisions
+		// Checks for collisions
 		this.isValid = function(cell) {
 			var valid = false;
 			if (cell[0]>=0&&cell[0]<columns&&cell[1]>=0&&cell[1]<rows && !this.checkTailCollision(cell)) {
@@ -149,8 +150,11 @@ $(document).ready(function() {
 		}
 
 		
-		// Check if snake has collided with itself
+		// Checks if snake has collided with itself
 		this.checkTailCollision = function(cell) {
+			if (this.invincible) {
+				return false;
+			}
 			var body = this.snakeBody.slice(0, -1); 
 			for (var i = 0; i < body.length; i++) {
 				if (body[i][0] == cell[0] && body[i][1] == cell[1]) {
@@ -161,6 +165,7 @@ $(document).ready(function() {
 		}
 
 
+		// Checks if position is already occupied by snake or object
 		this.checkOverlap = function(pos) {
 			for (var i = 0; i < this.snakeBody.length; i++) {
 				if (this.snakeBody[i][0] == pos[0] && this.snakeBody[i][1] == pos[1]) {
@@ -234,7 +239,7 @@ $(document).ready(function() {
 
 		this.generatePowerup = function() {
 			//var rand = types[((Math.random() * (2 - 0 + 1) ) << 0)];
-			var type = types[0];
+			var type = types[2];
 			switch (type) {
 				case "speed":
 					this.powerType = type;
@@ -245,7 +250,9 @@ $(document).ready(function() {
 					//
 					break;
 				case "invincible":
-					//
+					this.powerType = type;
+					this.position = generatePosition();
+					$(posToId([this.position[0],this.position[1]])).toggleClass("invincible");
 			}
 			placedItems.push(this.position);
 		}
@@ -259,7 +266,7 @@ $(document).ready(function() {
 					//
 					break;
 				case "invincible":
-					//
+					snake.invincible = true;
 			}
 
 		}
@@ -273,7 +280,7 @@ $(document).ready(function() {
 					//
 					break;
 				case "invincible":
-					//
+					snake.invincible = false;
 			}
 		}
 
