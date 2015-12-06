@@ -87,16 +87,16 @@ $(document).ready(function() {
 			this.snakeBody.unshift([this.currX,this.currY]);
 			if (currentPos===foodPos1) {  // When snake passes over food
 				$(posToId(food1.position)).toggleClass("food");
-				removeElement(foodPos1); // CHANGE THIS
+				removeFromBoard(food1.position);
 				food1.generateFood();
 			} else if (currentPos===foodPos2) {
 				$(posToId(food2.position)).toggleClass("food");
-				removeElement(foodPos2); // CHANGE THIS
+				removeFromBoard(food2.position);
 				food2.generateFood();
 			} else if (currentPos===powerUpPos) {
 				$(posToId(powerUpTest.position)).toggleClass("speed");
 				powerUpTest.activatePowerUp(snake1);
-				removeElement(powerUpPos); // CHANGE THIS
+				removeFromBoard(powerUpTest.position);
 			} else {
 				var lastSeg = this.snakeBody.pop();
 				$(posToId([lastSeg[0],lastSeg[1]])).toggleClass("snake"); // Remove final segment of snake
@@ -274,16 +274,28 @@ $(document).ready(function() {
 	}
 
 	function isItemInArray(array, item) {
-	    for (var i = 0; i < array.length; i++) {
-	        if (array[i][0] == item[0] && array[i][1] == item[1]) {
+		for (var i = 0; i < array.length; i++) {
+			if (array[i][0] == item[0] && array[i][1] == item[1]) {
 	            return true;   // Found it
+	          }
 	        }
-	    }
 	    return false;   // Not found
+	  }
+
+	function findIndex(array,item) {
+		for (var i = 0; i < array.length; i++) {
+		    if (array[i][0] == item[0] && array[i][1] == item[1]) {
+		        console.log("found");
+		        return i;
+		    }
+		}
+		console.log("Error: not found");
 	}
 
-	function removeElement(pos) { // DOESN'T WORK WITH ARRAY OF ARRAYS
-		index = placedItems.indexOf(pos);
+	function removeFromBoard(pos) { // not working
+		console.log(placedItems);
+		console.log(pos);
+		index = findIndex(placedItems,pos);
 		if (index > -1) {
 		    placedItems.splice(index, 1);
 		}
@@ -304,6 +316,8 @@ $(document).ready(function() {
 
 		powerUpTest = new PowerUp();
 		powerUpTest.generatePowerUp();
+
+		console.log(placedItems);
 	}
 
 	
