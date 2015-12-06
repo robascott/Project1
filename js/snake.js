@@ -105,12 +105,12 @@ $(document).ready(function() {
 				food2.generateFood();
 			} else if (currentPos===powerupPos1 && !this.powerup1Active) {  // what about powerup1 then powerup1 again
 				if (this.powerup2Active) {
-					powerup2.deactivatePowerup(snake1); //change snake1
+					powerup2.deactivatePowerup(this);
 					this.powerupTime = 0;
 				}
 				console.log("contact1: " + currentPos + " " + powerupPos1);
 				$(posToId(powerup1.position)).toggleClass(powerup1.powerType);
-				powerup1.activatePowerup(snake1); // change snake1
+				powerup1.activatePowerup(this);
 				removeFromBoard(powerup1.position);
 				this.currentPowerup = powerup1;
 				this.powerup1Active = true;
@@ -121,12 +121,12 @@ $(document).ready(function() {
 				},10000);
 			} else if (currentPos===powerupPos2 && !this.powerup2Active) {
 				if (this.powerup1Active) {
-					powerup1.deactivatePowerup(snake1); //change snake1
+					powerup1.deactivatePowerup(this);
 					this.powerupTimer = 0;
 				}
 				console.log("contact2: " + currentPos + " " + powerupPos2);
 				$(posToId(powerup2.position)).toggleClass(powerup2.powerType);
-				powerup2.activatePowerup(snake1); // change snake1
+				powerup2.activatePowerup(this);
 				removeFromBoard(powerup2.position);
 				this.currentPowerup = powerup2;
 				this.powerup2Active = true;
@@ -234,7 +234,7 @@ $(document).ready(function() {
 						self.powerup1Active = false;
 						self.powerup2Active = false;
 						//console.log('sdsdfsd');
-						self.currentPowerup.deactivatePowerup(snake1); // change snake1
+						self.currentPowerup.deactivatePowerup(self); // change snake1
 						self.powerupTimer = 0;
 					}
 					self.powerupTimer += self.loopTime;
@@ -274,20 +274,9 @@ $(document).ready(function() {
 
 		this.generatePowerup = function() {
 			var rand = types[((Math.random() * (1 - 0 + 1) ) << 0)]; // change first '1' to '2'
-			switch (rand) {
-				case "speed":
-					this.powerType = rand;
-					this.position = generatePosition();
-					$(posToId([this.position[0],this.position[1]])).toggleClass("speed");
-					break;
-				case "shrink":
-					//
-					break;
-				case "invincible":
-					this.powerType = rand;
-					this.position = generatePosition();
-					$(posToId([this.position[0],this.position[1]])).toggleClass("invincible");
-			}
+			this.powerType = rand;
+			this.position = generatePosition();
+			$(posToId([this.position[0],this.position[1]])).toggleClass(rand);
 			placedItems.push(this.position);
 		}
 
