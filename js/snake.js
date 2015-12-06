@@ -207,15 +207,8 @@ $(document).ready(function() {
 		this.generateFood = function() {
 			this.position = generatePosition();
 			$(posToId([this.position[0],this.position[1]])).toggleClass("food");  // Display food
+			placedItems.push(this.position);
 		}
-
-		// this.generateFood = function() {
-		// 	this.position = [(Math.floor(Math.random() * columns)),(Math.floor(Math.random() * rows))];
-		// 	while (snake1.checkOverlap(this.position) || placedItems.indexOf(this.position)!==-1) {  // To avoid placing food on top of snakes
-		// 		this.position = [(Math.floor(Math.random() * columns)),(Math.floor(Math.random() * rows))];
-		// 	}
-		// 	$(posToId([this.position[0],this.position[1]])).toggleClass("food");  // Display food
-		// }
 	}
 
 
@@ -240,6 +233,7 @@ $(document).ready(function() {
 				case "invincible":
 					//
 			}
+			placedItems.push(this.position);
 		}
 
 		this.activatePowerUp = function(snake) {
@@ -263,7 +257,7 @@ $(document).ready(function() {
 
 	function generatePosition() {
 		var pos = [(Math.floor(Math.random() * columns)),(Math.floor(Math.random() * rows))];
-		while (snake1.checkOverlap(pos) || placedItems.indexOf(pos)!==-1) {  // To avoid placing food on top of snakes
+		while (snake1.checkOverlap(pos) || isItemInArray(placedItems,pos)) {  // To avoid placing food on top of snakes
 			pos = [(Math.floor(Math.random() * columns)),(Math.floor(Math.random() * rows))];
 		}
 		return pos;
@@ -279,7 +273,14 @@ $(document).ready(function() {
 		return "#" + pos[0] + "-" + pos[1];
 	}
 
-
+	function isItemInArray(array, item) {
+	    for (var i = 0; i < array.length; i++) {
+	        if (array[i][0] == item[0] && array[i][1] == item[1]) {
+	            return true;   // Found it
+	        }
+	    }
+	    return false;   // Not found
+	}
 
 	function removeElement(pos) { // DOESN'T WORK WITH ARRAY OF ARRAYS
 		index = placedItems.indexOf(pos);
@@ -293,20 +294,13 @@ $(document).ready(function() {
 
 		placedItems = [];
 
-		var foodInit1 = [10,15];
-		var foodInit2 = [30,30];
-
-		food1 = new Food(foodInit1);
-		food2 = new Food(foodInit2);
-
-		placedItems.push(foodInit1);
-		placedItems.push(foodInit2);
-
-
-		$(posToId(foodInit1)).toggleClass("food");
-		$(posToId(foodInit2)).toggleClass("food");
-
 		snake1 = new Snake([5,20]);
+
+		food1 = new Food();
+		food2 = new Food();
+
+		food1.generateFood();
+		food2.generateFood();
 
 		powerUpTest = new PowerUp();
 		powerUpTest.generatePowerUp();
