@@ -320,6 +320,7 @@ $(document).ready(function() {
 			return isOverlap;
 		}
 
+		var counter = 2;
 
 		// Move snake
 		this.move = function() {
@@ -343,7 +344,31 @@ $(document).ready(function() {
 					gameRunning = false;
 				}
 
+
 				if (self.powerup1Active || self.powerup2Active) {
+					if (self.currentPowerup.powerType==="invincible") {
+						if (self.powerupTimer>=4000 && self.powerupTimer<6000) {
+							if (counter%2==0) {
+								for (i=0; i<self.snakeBody.length; i++) {
+									$(posToId(self.snakeBody[i])).removeClass("invincibleSnake");
+								}
+								for (i=0; i<self.snakeBody.length; i++) {
+									$(posToId(self.snakeBody[i])).addClass("snake" + self.player);
+								}
+								self.snakeCSS = "snake" + self.player;
+							} else {
+								for (i=0; i<self.snakeBody.length; i++) {
+									$(posToId(self.snakeBody[i])).removeClass("snake" + self.player);
+								}
+								for (i=0; i<self.snakeBody.length; i++) {
+									$(posToId(self.snakeBody[i])).addClass("invincibleSnake");
+								}
+								self.snakeCSS = "invincibleSnake";
+							}
+							counter++;
+						}
+					}
+
 					if (self.powerupTimer>=6000) {
 						self.powerup1Active = false;
 						self.powerup2Active = false;
