@@ -76,6 +76,8 @@ $(document).ready(function() {
 
 		this.snakeCSS;
 
+		this.player = player;
+
 		this.currentPowerup;
 
 		this.powerup1Active = false;
@@ -351,7 +353,7 @@ $(document).ready(function() {
 					self.powerupTimer += self.loopTime;
 				}
 
-				if (gameRunning===true) {
+				if (gameRunning===true && player!=="2") { // testing purposes
 					self.move();
 				}
 			}, self.loopTime);
@@ -410,6 +412,12 @@ $(document).ready(function() {
 					break;
 				case "invincible":
 					snake.invincible = true;
+					for (i=0; i<snake.snakeBody.length; i++) {
+						$(posToId(snake.snakeBody[i])).removeClass(snake.snakeCSS)
+						$(posToId(snake.snakeBody[i])).toggleClass("invincibleSnake");
+					}
+					$(posToId(snake.snakeBody[0])).toggleClass("invincibleSnake");
+					snake.snakeCSS = "invincibleSnake";
 			}
 		}
 
@@ -423,6 +431,17 @@ $(document).ready(function() {
 					break;
 				case "invincible":
 					snake.invincible = false;
+					if (snake.player==="1") {
+						regularCSS = "snake1";
+					} else {
+						regularCSS = "snake2";
+					}
+					for (i=0; i<snake.snakeBody.length; i++) {
+						$(posToId(snake.snakeBody[i])).removeClass(snake.snakeCSS)
+						$(posToId(snake.snakeBody[i])).addClass(regularCSS);
+					}
+					snake.snakeCSS = regularCSS;
+
 			}
 		}
 	}
