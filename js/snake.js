@@ -40,9 +40,11 @@ $(document).ready(function() {
 	var gameRunning = false;
 	var winner;
 
+	var timerInterval;
+
 	function startTimer(duration, display) {
 		var timer = duration, minutes, seconds;
-		setInterval(function () {
+		timerInterval = setInterval(function () {
 			minutes = parseInt(timer / 60, 10);
 			seconds = parseInt(timer % 60, 10);
 
@@ -325,6 +327,7 @@ $(document).ready(function() {
 					self.updateSegments(nextX,nextY);
 
 				} else {
+					clearInterval(timerInterval);
 					console.log("Game over");
 					console.log(winner + " wins!");
 					gameRunning = false;
