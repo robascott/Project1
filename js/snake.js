@@ -388,7 +388,7 @@ $(document).ready(function() {
 					self.powerupTimer += self.loopTime;
 				}
 
-				if (gameRunning===true /*&& player!=="2"*/) { // for testing purposes
+				if (gameRunning===true && player!=="2") { // for testing purposes
 					self.move();
 				}
 			}, self.loopTime);
@@ -418,11 +418,35 @@ $(document).ready(function() {
 		this.position;
 		this.powerType;
 
+
+		this.rand = function(min, max) {
+		    return Math.floor(Math.random() * (max - min + 1)) + min;
+		};
+
+		this.generateWeighedList = function(list, weight) {
+			var weighed_list = [];
+
+		  // Loop over weights
+		  for (var i = 0; i < weight.length; i++) {
+		  	var multiples = weight[i] * 100;
+
+		    // Loop over the list of items
+		    for (var j = 0; j < multiples; j++) {
+		    	weighed_list.push(list[i]);
+		    }
+		  }
+		  return weighed_list;
+		};
+		 
 		var types = ["speed","invincible","shrink"];
+		var weight = [0.45, 0.45, 0.1];
+		var weighedList = this.generateWeighedList(types, weight);
 
 		this.generatePowerup = function() {
 			if (gameRunning===true) {
-				var rand = types[((Math.random() * (2 - 0 + 1) ) << 0)];
+				//var rand = types[((Math.random() * (2 - 0 + 1) ) << 0)];
+				var randomNum = this.rand(0, weighedList.length-1);
+				var rand = weighedList[randomNum]
 				this.powerType = rand;
 				this.position = generatePosition();
 				$(posToId([this.position[0],this.position[1]])).toggleClass(rand);
