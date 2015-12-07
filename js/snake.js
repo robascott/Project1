@@ -3,7 +3,6 @@ $(document).ready(function() {
 	//Create board
 	var table = document.createElement("TABLE");
 	table.id = "board";
-	table.border = "1";
 	
 	var columnCount = 35;
 	var rowCount = 30;
@@ -15,22 +14,28 @@ $(document).ready(function() {
 		}
 	}
 
+
 	// Wait until table is loaded
 	$("#board").waitUntilExists(startGame);
 
 
-	var container = document.getElementById("boardcontainer");
+	var container = document.getElementById("screen");
 	container.appendChild(table);
 
 	var board = document.getElementById("board");
 
-	console.log($("#boardcontainer").css("max-width"));
-	var width = board.offsetWidth;
-	console.log(width);
-	$("#boardcontainer").css("max-width",width);
-	console.log($("#boardcontainer").css("max-width"));
-	console.log($("#topboard").css("max-width"));
+	var screenBox = document.getElementById("screen");
 
+	var width = board.offsetWidth;
+	var height = board.offsetHeight;
+	$("#boardcontainer").css("max-width",width + 80);
+
+	
+	$("#screen").css("max-width",width+60);
+	$("#screen").css("height",height+60);
+
+	var screenWidth = screenBox.offsetWidth;
+	var screenHeight = screenBox.offsetHeight;
 
 	// Board dimensions
 	var rows = board.rows.length;
@@ -69,6 +74,8 @@ $(document).ready(function() {
 
 		this.score = 0;
 
+		this.snakeCSS;
+
 		this.currentPowerup;
 
 		this.powerup1Active = false;
@@ -85,13 +92,13 @@ $(document).ready(function() {
 		
 		if (player==="1") {
 			var opponent = "2";
-			var snakeCSS = "snake1";
+			this.snakeCSS = "snake1";
 			for (i=this.snakeLength-2;i>=0;i--) {  // Build snake
 				this.snakeBody.push([3,i+5]);
 			}
 		} else {
 			var opponent = "1";
-			var snakeCSS = "snake2";
+			this.snakeCSS = "snake2";
 			for (i=this.snakeLength-2;i>=0;i--) {  // Build snake
 				this.snakeBody.push([27,i+5]);
 			}
@@ -99,7 +106,7 @@ $(document).ready(function() {
 
 		for (i=0; i<this.snakeLength; i++) {  // Colour snake
 			var segment = this.snakeBody[i];
-			$(posToId([segment[0],segment[1]])).toggleClass(snakeCSS);
+			$(posToId([segment[0],segment[1]])).toggleClass(this.snakeCSS);
 		}
 
 		var self = this;
@@ -187,6 +194,7 @@ $(document).ready(function() {
 				removeFromBoard(food2.position);
 				food2.generateFood();
 				this.score += 10;
+				this.updateScore();
 				this.snakeLength++;
 			} else if (currentPos===powerupPos1 && !this.powerup1Active) {  // what about powerup1 then powerup1 again
 				if (this.powerup2Active) {
@@ -199,7 +207,7 @@ $(document).ready(function() {
 				this.currentPowerup = powerup1;
 				this.powerup1Active = true;
 				var lastSeg = this.snakeBody.pop(); // make this more DRY
-				$(posToId([lastSeg[0],lastSeg[1]])).toggleClass(snakeCSS); // Remove final segment of snake
+				$(posToId([lastSeg[0],lastSeg[1]])).toggleClass(this.snakeCSS); // Remove final segment of snake
 				powerup1.position = "";
 				setTimeout(function() {
 					powerup1.generatePowerup()
@@ -215,16 +223,16 @@ $(document).ready(function() {
 				this.currentPowerup = powerup2;
 				this.powerup2Active = true;
 				var lastSeg = this.snakeBody.pop();
-				$(posToId([lastSeg[0],lastSeg[1]])).toggleClass(snakeCSS); // Remove final segment of snake
+				$(posToId([lastSeg[0],lastSeg[1]])).toggleClass(this.snakeCSS); // Remove final segment of snake
 				powerup2.position = "";
 				setTimeout(function() {
 					powerup2.generatePowerup();
 				},10000);
 			} else {
 				var lastSeg = this.snakeBody.pop(); // make this more DRY
-				$(posToId([lastSeg[0],lastSeg[1]])).toggleClass(snakeCSS); // Remove final segment of snake
+				$(posToId([lastSeg[0],lastSeg[1]])).toggleClass(this.snakeCSS); // Remove final segment of snake
 			}
-			$(posToId([nextX,nextY])).toggleClass(snakeCSS); // Display new position of head of snake
+			$(posToId([nextX,nextY])).toggleClass(this.snakeCSS); // Display new position of head of snake
 		}
 
 
@@ -395,7 +403,7 @@ $(document).ready(function() {
 						var reducedLength = Math.floor(snake.snakeLength/2);
 						for (i=0; i<reducedLength; i++) {
 							var lastSeg = snake.snakeBody.pop();
-							$(posToId([lastSeg[0],lastSeg[1]])).toggleClass(snakeCSS);
+							$(posToId([lastSeg[0],lastSeg[1]])).toggleClass(snake.snakeCSS);
 							snake.snakeLength--;
 						}
 					}

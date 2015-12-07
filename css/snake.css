@@ -1,38 +1,81 @@
+@font-face {
+	font-family: "ocra";
+	src: url(../fonts/ocraextended.ttf) format("truetype");
+}
+
+
+body {
+	color: white;
+	background: black;
+}
+
+#overlay {
+	position: absolute;
+	background: repeating-linear-gradient(
+	    #609860,
+	    #609860 3px,
+	    #386238 3px,
+	    #386238 5px
+	);
+	opacity: 0.3;
+	width: 100%;
+	height: 100%;
+	z-index: 9999;
+}
+
 #boardcontainer {
-	border: 1px solid black;
-	/*max-width: 1000px;*/
+	margin: 0 auto;
+	/*height: 600px;*/
+}
+
+#screen {
+	border-radius: 40px;
+	position: relative;
+	overflow: hidden;
 	margin: 0 auto;
 }
 
 #board {
-	background-color:#FFFFCC;
+	/*position: relative;
+	top: 15px*/;
+	border: 2px solid white;
+	/*background-color:black;*/
 	border-collapse:collapse;
-	border:1px solid #FFCC00;
-	color:#000000;
-	/*width:100%;*/
-	margin: 0 auto;
+	/*border:1px solid #FFCC00;*/
+	margin: 20px auto;
+	margin-top: 30px;
 }
 
 #board td {
+	padding: 0;
 	height: 15px;
 	width: 15px;
 }
 
 #topbar {
-	height: 100px;
-	border: 1px solid green;
+	font-family: "ocra";
+	height: 80px;
+	/*border: 1px solid green;*/
 	position: relative;
 }
 
 
 #p1scorebox {
-	/*visibility: hidden;*/
 	float: left;
 	text-align: center;
 	border: 1px solid black;
 }
 
+#p1scoretext {
+	margin: 0;
+}
+
+#p1scoreno {
+	margin-bottom: 0;
+}
+
 #time {
+	font-size: 30px;
 	position: absolute; 
 	bottom: 0;
 	margin-left: auto;
@@ -52,6 +95,14 @@
 	border: 1px solid black;
 }
 
+#p2scoretext {
+	margin: 0;
+}
+
+#p2scoreno {
+	margin-bottom: 0;
+}
+
 
 
 #clear {
@@ -61,33 +112,39 @@
 
 
 .snake1 {
-	border-radius: 5px;
-	background: black;
+	background: #00FFFF;
 }
 
 .snake2 {
-	border-radius: 5px;
-	background: gray;
+	background: #DD0011;
 }
 
 
 
 
 .food {
-	background: red;
+	background-image: url(../img/apple.png);
+	background-size: 14px;
+	background-repeat: no-repeat;
 }
 
 
 .speed {
-	background: blue;
+	background: url(../img/speed.svg);
+	background-size: 16px;
+	background-repeat: no-repeat;
 }
 
 
 .shrink {
-	background: orange;
+	background: url(../img/scissors.svg);
+	background-size: 15px;
+	background-repeat: no-repeat;
 }
 
 
 .invincible {
-	background: green;
+	background: url(../img/shield.svg);
+	background-size: 15px;
+	background-repeat: no-repeat;
 }
