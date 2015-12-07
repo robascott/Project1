@@ -5,8 +5,8 @@ $(document).ready(function() {
 	table.id = "board";
 	table.border = "1";
 	
-	var columnCount = 15;
-	var rowCount = 15;
+	var columnCount = 35;
+	var rowCount = 30;
 	for (var i = 0; i < rowCount; i++) {
 		var row = table.insertRow(-1);
 		for (var j = 0; j < columnCount; j++) {
@@ -44,17 +44,14 @@ $(document).ready(function() {
 
 		this.invincible = false;
 
-		this.snakeLength = 3;
+		this.snakeLength = 8;
 		this.snakeBody = [[this.currX,this.currY]]
 		this.moves = ["down"];
 		this.oldDirection = "down";
 
 		for (i=this.snakeLength-2;i>=0;i--) {  // Build snake
-			this.snakeBody.push([2,i+4]);
+			this.snakeBody.push([3,i+5]);
 		}
-
-		var bla = JSON.parse(JSON.stringify(this.snakeBody));
-		console.log(bla);
 
 		for (i=0; i<this.snakeLength; i++) {  // Colour snake
 			var segment = this.snakeBody[i];
@@ -113,7 +110,6 @@ $(document).ready(function() {
 					powerup2.deactivatePowerup(this);
 					this.powerupTime = 0;
 				}
-				//console.log("contact1: " + currentPos + " " + powerupPos1);
 				$(posToId(powerup1.position)).toggleClass(powerup1.powerType);
 				powerup1.activatePowerup(this);
 				removeFromBoard(powerup1.position);
@@ -121,8 +117,8 @@ $(document).ready(function() {
 				this.powerup1Active = true;
 				var lastSeg = this.snakeBody.pop(); // make this more DRY
 				$(posToId([lastSeg[0],lastSeg[1]])).toggleClass("snake"); // Remove final segment of snake
+				powerup1.position = "";
 				setTimeout(function() {
-					console.log(self.snakeBody);
 					powerup1.generatePowerup()
 				},10000);
 			} else if (currentPos===powerupPos2 && !this.powerup2Active) {
@@ -130,7 +126,6 @@ $(document).ready(function() {
 					powerup1.deactivatePowerup(this);
 					this.powerupTimer = 0;
 				}
-				//console.log("contact2: " + currentPos + " " + powerupPos2);
 				$(posToId(powerup2.position)).toggleClass(powerup2.powerType);
 				powerup2.activatePowerup(this);
 				removeFromBoard(powerup2.position);
@@ -138,8 +133,8 @@ $(document).ready(function() {
 				this.powerup2Active = true;
 				var lastSeg = this.snakeBody.pop();
 				$(posToId([lastSeg[0],lastSeg[1]])).toggleClass("snake"); // Remove final segment of snake
+				powerup2.position = "";
 				setTimeout(function() {
-					console.log(self.snakeBody);
 					powerup2.generatePowerup();
 				},10000);
 			} else {
@@ -236,7 +231,6 @@ $(document).ready(function() {
 
 				if (self.powerup1Active || self.powerup2Active) {
 					if (self.powerupTimer>=6000) {
-						console.log('powerup end');
 						self.powerup1Active = false;
 						self.powerup2Active = false;
 						self.currentPowerup.deactivatePowerup(self);
@@ -369,7 +363,7 @@ $(document).ready(function() {
 
 		placedItems = [];
 
-		snake1 = new Snake([2,6]);
+		snake1 = new Snake([3,12]);
 
 		food1 = new Food();
 		food2 = new Food();
