@@ -86,6 +86,8 @@ $(document).ready(function() {
 
 		this.invincible = false;
 
+		this.losingMove = false;
+
 		this.snakeLength = 8;
 		this.snakeBody = [[this.currX,this.currY]]
 		this.moves = ["down"];
@@ -274,7 +276,7 @@ $(document).ready(function() {
 				return true;
 			}
 			winner = opponent;
-			console.log("collision");
+			this.losingMove = true;
 			gameRunning = false;
 		}
 
@@ -320,7 +322,7 @@ $(document).ready(function() {
 			return isOverlap;
 		}
 
-		var counter = 2;
+		var counter = 2; // for flashing snake
 
 		// Move snake
 		this.move = function() {
@@ -338,10 +340,17 @@ $(document).ready(function() {
 					self.updateSegments(nextX,nextY);
 
 				} else {
-					clearInterval(timerInterval);
-					console.log("Game over");
-					console.log(winner + " wins!");
-					gameRunning = false;
+					setTimeout(function() {
+						if (snake1.losingMove && snake2.losingMove) {
+							console.log("No winner");
+							gameRunning = false;
+						} else {
+							clearInterval(timerInterval);
+							console.log("Game over");
+							console.log("Player " + winner + " wins!");
+							gameRunning = false;
+						}
+					},100)
 				}
 
 
@@ -378,7 +387,7 @@ $(document).ready(function() {
 					self.powerupTimer += self.loopTime;
 				}
 
-				if (gameRunning===true && player!=="2") { // testing purposes
+				if (gameRunning===true /*&& player!=="2"*/) { // testing purposes
 					self.move();
 				}
 			}, self.loopTime);
