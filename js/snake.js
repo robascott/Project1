@@ -28,7 +28,7 @@ $(document).ready(function() {
 	var columns = board.rows[0].cells.length;
 
 
-	var Snake = function(start) {
+	var Snake = function(start,player) {
 		
 		this.currX = start[0];
 		this.currY = start[1];
@@ -36,7 +36,6 @@ $(document).ready(function() {
 		this.loopTime = 100;
 
 		this.currentPowerup;
-		//this.powerupActive = false;
 
 		this.powerup1Active = false;
 		this.powerup2Active = false;
@@ -60,30 +59,56 @@ $(document).ready(function() {
 
 		var self = this;
 
-		// Keypress event listeners
-		$(window).keydown(function(e) {
-			currDir = null;
-			if (self.moves.length===0) {
-				currDir = self.oldDirection;
-			}
-			if (e.keyCode===87) {  // W key
-				if (self.moves[0]!=="down" && self.moves[0]!=="up" && currDir!=="down") {
-					self.moves.unshift("up");
+		if (player==="1") {
+			// Keypress event listeners
+			$(window).keydown(function(e) {
+				currDir = null;
+				if (self.moves.length===0) {
+					currDir = self.oldDirection;
 				}
-			} else if (e.keyCode===83) {  // S key
-				if (self.moves[0]!=="up" && self.moves[0]!=="down" && currDir!=="up") {
-					self.moves.unshift("down");
+				if (e.keyCode===87) {  // W key
+					if (self.moves[0]!=="down" && self.moves[0]!=="up" && currDir!=="down") {
+						self.moves.unshift("up");
+					}
+				} else if (e.keyCode===83) {  // S key
+					if (self.moves[0]!=="up" && self.moves[0]!=="down" && currDir!=="up") {
+						self.moves.unshift("down");
+					}
+				} else if (e.keyCode===68) {  // D key
+					if (self.moves[0]!=="left" && self.moves[0]!=="right" && currDir!=="left") {
+						self.moves.unshift("right");
+					}
+				} else if (e.keyCode===65) {  // A key
+					if (self.moves[0]!=="right" && self.moves[0]!=="left" && currDir!=="right") {
+						self.moves.unshift("left");
+					}
 				}
-			} else if (e.keyCode===68) {  // D key
-				if (self.moves[0]!=="left" && self.moves[0]!=="right" && currDir!=="left") {
-					self.moves.unshift("right");
+			});
+		} else {
+			$(window).keydown(function(e) {
+				currDir = null;
+				if (self.moves.length===0) {
+					currDir = self.oldDirection;
 				}
-			} else if (e.keyCode===65) {  // A key
-				if (self.moves[0]!=="right" && self.moves[0]!=="left" && currDir!=="right") {
-					self.moves.unshift("left");
+				if (e.keyCode===73) {  // I key
+					if (self.moves[0]!=="down" && self.moves[0]!=="up" && currDir!=="down") {
+						self.moves.unshift("up");
+					}
+				} else if (e.keyCode===75) {  // K key
+					if (self.moves[0]!=="up" && self.moves[0]!=="down" && currDir!=="up") {
+						self.moves.unshift("down");
+					}
+				} else if (e.keyCode===76) {  // L key
+					if (self.moves[0]!=="left" && self.moves[0]!=="right" && currDir!=="left") {
+						self.moves.unshift("right");
+					}
+				} else if (e.keyCode===74) {  // J key
+					if (self.moves[0]!=="right" && self.moves[0]!=="left" && currDir!=="right") {
+						self.moves.unshift("left");
+					}
 				}
-			}
-		});
+			});
+		}
 
 
 		// Move snake's position on board
@@ -183,14 +208,24 @@ $(document).ready(function() {
 		}
 
 		
-		// Checks if snake has collided with itself
+		// Checks if snake has collided with itself or other snake
 		this.checkTailCollision = function(cell) {
 			if (this.invincible) {
 				return false;
 			}
-			var body = this.snakeBody.slice(0, -1); 
-			for (var i = 0; i < body.length; i++) {
-				if (body[i][0] == cell[0] && body[i][1] == cell[1]) {
+			var myBody = this.snakeBody.slice(0, -1);
+			if (player==="1") {
+				var otherBody = snake2.snakeBody.slice(0, -1);
+			} else {
+				var otherBody = snake1.snakeBody.slice(0, -1);
+			}
+			for (var i=0; i<myBody.length; i++) {
+				if (myBody[i][0] == cell[0] && myBody[i][1] == cell[1]) {
+					return true;
+				}
+			}
+			for (var i=0; i<otherBody.length; i++) {
+				if (otherBody[i][0] == cell[0] && otherBody[i][1] == cell[1]) {
 					return true;
 				}
 			}
@@ -198,14 +233,20 @@ $(document).ready(function() {
 		}
 
 
-		// Checks if position is already occupied by snake or object
+		// Checks if position is already occupied by snake MOVE TO GLOBAL SCOPE???
 		this.checkOverlap = function(pos) {
-			for (var i = 0; i < this.snakeBody.length; i++) {
-				if (this.snakeBody[i][0] == pos[0] && this.snakeBody[i][1] == pos[1]) {
+			var isOverlap = false;
+			for (var i = 0; i < snake1.snakeBody.length; i++) {
+				if (snake1.snakeBody[i][0] == pos[0] && snake1.snakeBody[i][1] == pos[1]) {
 					return true;
 				}
 			}
-			return false;
+			for (var i = 0; i < snake2.snakeBody.length; i++) {
+				if (snake2.snakeBody[i][0] == pos[0] && snake2.snakeBody[i][1] == pos[1]) {
+					return true;
+				}
+			}
+			return isOverlap;
 		}
 
 
@@ -316,7 +357,7 @@ $(document).ready(function() {
 
 	function generatePosition() {
 		var pos = [(Math.floor(Math.random() * columns)),(Math.floor(Math.random() * rows))];
-		while (snake1.checkOverlap(pos) || isItemInArray(placedItems,pos)) {  // To avoid placing food on top of snakes
+		while (snake1.checkOverlap(pos) || snake2.checkOverlap(pos) || isItemInArray(placedItems,pos)) {  // To avoid placing food on top of snakes
 			pos = [(Math.floor(Math.random() * columns)),(Math.floor(Math.random() * rows))];
 		}
 		return pos;
@@ -363,7 +404,9 @@ $(document).ready(function() {
 
 		placedItems = [];
 
-		snake1 = new Snake([3,12]);
+		snake1 = new Snake([3,12],"1");
+
+		snake2 = new Snake([27,12],"2");
 
 		food1 = new Food();
 		food2 = new Food();
