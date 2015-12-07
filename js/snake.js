@@ -40,6 +40,24 @@ $(document).ready(function() {
 	var gameRunning = false;
 	var winner;
 
+	function startTimer(duration, display) {
+		var timer = duration, minutes, seconds;
+		setInterval(function () {
+			minutes = parseInt(timer / 60, 10);
+			seconds = parseInt(timer % 60, 10);
+
+			minutes = minutes < 10 ? + minutes : minutes;
+			seconds = seconds < 10 ? "0" + seconds : seconds;
+
+			display.textContent = minutes + ":" + seconds;
+
+			if (--timer < 0) {
+				timer = duration;
+			}
+		}, 1000);
+	}
+
+
 	var Snake = function(start,player) {
 		
 		this.currX = start[0];
@@ -136,6 +154,7 @@ $(document).ready(function() {
 		}
 
 
+		// Update score
 		this.updateScore = function() {
 			if (player==="1") {
 				$('#p1scoreno').html(this.score);
@@ -445,7 +464,8 @@ $(document).ready(function() {
 	// Set up snakes, food and power-ups
 	function startGame() {
 
-		
+		display = document.querySelector('#time');
+		startTimer(119, display);
 
 		placedItems = [];
 
