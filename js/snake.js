@@ -18,10 +18,18 @@ $(document).ready(function() {
 	// Wait until table is loaded
 	$("#board").waitUntilExists(startGame);
 
+
 	var container = document.getElementById("boardcontainer");
 	container.appendChild(table);
 
 	var board = document.getElementById("board");
+
+	console.log($("#boardcontainer").css("max-width"));
+	var width = board.offsetWidth;
+	console.log(width);
+	$("#boardcontainer").css("max-width",width);
+	console.log($("#boardcontainer").css("max-width"));
+
 
 	// Board dimensions
 	var rows = board.rows.length;
@@ -29,7 +37,7 @@ $(document).ready(function() {
 
 
 	var gameRunning = false;
-
+	var winner;
 
 	var Snake = function(start,player) {
 		
@@ -37,6 +45,8 @@ $(document).ready(function() {
 		this.currY = start[1];
 
 		this.loopTime = 100;
+
+		this.score = 0;
 
 		this.currentPowerup;
 
@@ -53,17 +63,18 @@ $(document).ready(function() {
 
 		
 		if (player==="1") {
-			var snakeCSS = "snake1"
+			var opponent = "2";
+			var snakeCSS = "snake1";
 			for (i=this.snakeLength-2;i>=0;i--) {  // Build snake
 				this.snakeBody.push([3,i+5]);
 			}
 		} else {
-			var snakeCSS = "snake2"
+			var opponent = "1";
+			var snakeCSS = "snake2";
 			for (i=this.snakeLength-2;i>=0;i--) {  // Build snake
 				this.snakeBody.push([27,i+5]);
 			}
-		}
-	
+		}	
 
 		for (i=0; i<this.snakeLength; i++) {  // Colour snake
 			var segment = this.snakeBody[i];
@@ -124,6 +135,13 @@ $(document).ready(function() {
 		}
 
 
+		this.updateScore = function() {
+			if (player==="1") {
+				$('#p1score').html()
+			}
+		}
+
+
 		// Move snake's position on board
 		this.updateSegments = function(nextX,nextY) {
 			var currentPos = [this.currX,this.currY].toString();
@@ -137,11 +155,14 @@ $(document).ready(function() {
 				$(posToId(food1.position)).toggleClass("food");
 				removeFromBoard(food1.position);
 				food1.generateFood();
+				this.score += 10;
+				this.updateScore();
 				this.snakeLength++;
 			} else if (currentPos===foodPos2) {
 				$(posToId(food2.position)).toggleClass("food");
 				removeFromBoard(food2.position);
 				food2.generateFood();
+				this.score += 10;
 				this.snakeLength++;
 			} else if (currentPos===powerupPos1 && !this.powerup1Active) {  // what about powerup1 then powerup1 again
 				if (this.powerup2Active) {
@@ -218,6 +239,7 @@ $(document).ready(function() {
 			if (cell[0]>=0&&cell[0]<columns&&cell[1]>=0&&cell[1]<rows && !this.checkTailCollision(cell)) {
 				return true;
 			}
+			winner = opponent;
 			console.log("collision");
 			gameRunning = false;
 		}
@@ -282,6 +304,7 @@ $(document).ready(function() {
 
 				} else {
 					console.log("Game over");
+					console.log(winner + " wins!");
 					gameRunning = false;
 				}
 
@@ -418,6 +441,8 @@ $(document).ready(function() {
 
 	// Set up snakes, food and power-ups
 	function startGame() {
+
+		
 
 		placedItems = [];
 
