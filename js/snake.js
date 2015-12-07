@@ -28,6 +28,9 @@ $(document).ready(function() {
 	var columns = board.rows[0].cells.length;
 
 
+	var gameRunning = false;
+
+
 	var Snake = function(start,player) {
 		
 		this.currX = start[0];
@@ -48,13 +51,23 @@ $(document).ready(function() {
 		this.moves = ["down"];
 		this.oldDirection = "down";
 
-		for (i=this.snakeLength-2;i>=0;i--) {  // Build snake
-			this.snakeBody.push([3,i+5]);
+		
+		if (player==="1") {
+			var snakeCSS = "snake1"
+			for (i=this.snakeLength-2;i>=0;i--) {  // Build snake
+				this.snakeBody.push([3,i+5]);
+			}
+		} else {
+			var snakeCSS = "snake2"
+			for (i=this.snakeLength-2;i>=0;i--) {  // Build snake
+				this.snakeBody.push([27,i+5]);
+			}
 		}
+	
 
 		for (i=0; i<this.snakeLength; i++) {  // Colour snake
 			var segment = this.snakeBody[i];
-			$(posToId([segment[0],segment[1]])).toggleClass("snake");
+			$(posToId([segment[0],segment[1]])).toggleClass(snakeCSS);
 		}
 
 		var self = this;
@@ -141,7 +154,7 @@ $(document).ready(function() {
 				this.currentPowerup = powerup1;
 				this.powerup1Active = true;
 				var lastSeg = this.snakeBody.pop(); // make this more DRY
-				$(posToId([lastSeg[0],lastSeg[1]])).toggleClass("snake"); // Remove final segment of snake
+				$(posToId([lastSeg[0],lastSeg[1]])).toggleClass(snakeCSS); // Remove final segment of snake
 				powerup1.position = "";
 				setTimeout(function() {
 					powerup1.generatePowerup()
@@ -157,16 +170,16 @@ $(document).ready(function() {
 				this.currentPowerup = powerup2;
 				this.powerup2Active = true;
 				var lastSeg = this.snakeBody.pop();
-				$(posToId([lastSeg[0],lastSeg[1]])).toggleClass("snake"); // Remove final segment of snake
+				$(posToId([lastSeg[0],lastSeg[1]])).toggleClass(snakeCSS); // Remove final segment of snake
 				powerup2.position = "";
 				setTimeout(function() {
 					powerup2.generatePowerup();
 				},10000);
 			} else {
 				var lastSeg = this.snakeBody.pop(); // make this more DRY
-				$(posToId([lastSeg[0],lastSeg[1]])).toggleClass("snake"); // Remove final segment of snake
+				$(posToId([lastSeg[0],lastSeg[1]])).toggleClass(snakeCSS); // Remove final segment of snake
 			}
-			$(posToId([nextX,nextY])).toggleClass("snake"); // Display new position of head of snake
+			$(posToId([nextX,nextY])).toggleClass(snakeCSS); // Display new position of head of snake
 		}
 
 
@@ -205,6 +218,8 @@ $(document).ready(function() {
 			if (cell[0]>=0&&cell[0]<columns&&cell[1]>=0&&cell[1]<rows && !this.checkTailCollision(cell)) {
 				return true;
 			}
+			console.log("collision");
+			gameRunning = false;
 		}
 
 		
@@ -287,7 +302,7 @@ $(document).ready(function() {
 
 		}
 
-		var gameRunning = true;
+		gameRunning = true;
 
 		this.move();
 
@@ -313,11 +328,13 @@ $(document).ready(function() {
 		var types = ["speed","invincible","shrink"];
 
 		this.generatePowerup = function() {
-			var rand = types[((Math.random() * (2 - 0 + 1) ) << 0)];
-			this.powerType = rand;
-			this.position = generatePosition();
-			$(posToId([this.position[0],this.position[1]])).toggleClass(rand);
-			placedItems.push(this.position);
+			if (gameRunning===true) {
+				var rand = types[((Math.random() * (2 - 0 + 1) ) << 0)];
+				this.powerType = rand;
+				this.position = generatePosition();
+				$(posToId([this.position[0],this.position[1]])).toggleClass(rand);
+				placedItems.push(this.position);
+			}
 		}
 
 		this.activatePowerup = function(snake) {
@@ -330,7 +347,7 @@ $(document).ready(function() {
 						var reducedLength = Math.floor(snake.snakeLength/2);
 						for (i=0; i<reducedLength; i++) {
 							var lastSeg = snake.snakeBody.pop();
-							$(posToId([lastSeg[0],lastSeg[1]])).toggleClass("snake");
+							$(posToId([lastSeg[0],lastSeg[1]])).toggleClass(snakeCSS);
 							snake.snakeLength--;
 						}
 					}

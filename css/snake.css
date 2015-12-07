@@ -14,9 +14,14 @@ td {
 
 
 
-.snake {
+.snake1 {
 	border-radius: 5px;
 	background: black;
+}
+
+.snake2 {
+	border-radius: 5px;
+	background: gray;
 }
 
 
