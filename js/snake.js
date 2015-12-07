@@ -342,6 +342,7 @@ $(document).ready(function() {
 				} else {
 					setTimeout(function() {
 						if (snake1.losingMove && snake2.losingMove) {
+							clearInterval(timerInterval);
 							console.log("No winner");
 							gameRunning = false;
 						} else {
@@ -387,7 +388,7 @@ $(document).ready(function() {
 					self.powerupTimer += self.loopTime;
 				}
 
-				if (gameRunning===true /*&& player!=="2"*/) { // testing purposes
+				if (gameRunning===true /*&& player!=="2"*/) { // for testing purposes
 					self.move();
 				}
 			}, self.loopTime);
