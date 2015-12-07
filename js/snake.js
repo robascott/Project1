@@ -29,6 +29,7 @@ $(document).ready(function() {
 	console.log(width);
 	$("#boardcontainer").css("max-width",width);
 	console.log($("#boardcontainer").css("max-width"));
+	console.log($("#topboard").css("max-width"));
 
 
 	// Board dimensions
@@ -86,7 +87,7 @@ $(document).ready(function() {
 		if (player==="1") {
 			// Keypress event listeners
 			$(window).keydown(function(e) {
-				currDir = null;
+				var currDir = null;
 				if (self.moves.length===0) {
 					currDir = self.oldDirection;
 				}
@@ -110,7 +111,7 @@ $(document).ready(function() {
 			});
 		} else {
 			$(window).keydown(function(e) {
-				currDir = null;
+				var currDir = null;
 				if (self.moves.length===0) {
 					currDir = self.oldDirection;
 				}
@@ -137,7 +138,9 @@ $(document).ready(function() {
 
 		this.updateScore = function() {
 			if (player==="1") {
-				$('#p1score').html()
+				$('#p1scoreno').html(this.score);
+			} else {
+				$('#p2scoreno').html(this.score);
 			}
 		}
 
