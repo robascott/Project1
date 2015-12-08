@@ -4,7 +4,7 @@ $(document).ready(function() {
 	var table = document.createElement("TABLE");
 	table.id = "board";
 	
-	var columnCount = 35;
+	var columnCount = 50;
 	var rowCount = 30;
 	for (var i = 0; i < rowCount; i++) {
 		var row = table.insertRow(-1);
@@ -512,9 +512,9 @@ $(document).ready(function() {
 
 
 	function generatePosition() {
-		var pos = [(Math.floor(Math.random() * columns)),(Math.floor(Math.random() * rows))];
+		var pos = [(Math.floor(Math.random() * columns-1)),(Math.floor(Math.random() * rows-1))];
 		while (snake1.checkOverlap(pos) || snake2.checkOverlap(pos) || isItemInArray(placedItems,pos)) {  // To avoid placing food on top of snakes
-			pos = [(Math.floor(Math.random() * columns)),(Math.floor(Math.random() * rows))];
+			pos = [(Math.floor(Math.random() * columns-1)),(Math.floor(Math.random() * rows-1))];
 		}
 		return pos;
 	}
