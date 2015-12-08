@@ -72,6 +72,7 @@ $(document).ready(function() {
 	$("#startbutton1").click(function(e){
 		mode = "one";
 		$("#time").html('2:00');
+		$("#p2scorebox").css("visibility","hidden");
 		$("#topbar").css("visibility","visible");
 		if (loaded) {
 			startGame();
@@ -90,6 +91,8 @@ $(document).ready(function() {
 		powerup1 = null;
 		powerup2 = null;
 		endScreenShown = false;
+		$('#p1scoreno').html("0");
+		$('#p2scoreno').html("0");
 		$("#time").html('2:00');
 		$("#endscreen").css("visibility","hidden");
 		$("td").removeClass();
@@ -105,6 +108,9 @@ $(document).ready(function() {
 		powerup1 = null;
 		powerup2 = null;
 		endScreenShown = false;
+		$("#p2scorebox").css("visibility","");
+		$('#p1scoreno').html("0");
+		$('#p2scoreno').html("0");
 		$("#endscreen").css("visibility","hidden");
 		$("#topbar").css("visibility","hidden");
 		$("td").removeClass();
