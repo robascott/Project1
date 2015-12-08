@@ -235,7 +235,6 @@ $(document).ready(function() {
 			var foodPos2 = food2.position.toString();
 			var powerupPos1 = powerup1.position.toString();
 			var powerupPos2 = powerup2.position.toString();
-			//var powerUpPos = powerUpTest.position.toString();
 			this.snakeBody.unshift([this.currX,this.currY]);
 			if (currentPos===foodPos1) {  // When snake passes over food
 				$(posToId(food1.position)).toggleClass("food");
@@ -259,10 +258,13 @@ $(document).ready(function() {
 						this.powerupTimer = 0;
 					}
 				}
+				if (powerup1.powerType!=="shrink") {
+					this.currentPowerup = powerup1;
+				}
+				console.log(this.powerupTimer); // REMOVE THIS!!!!!!!!!!!!
 				$(posToId(powerup1.position)).toggleClass(powerup1.powerType);
 				powerup1.activatePowerup(this);
 				removeFromBoard(powerup1.position);
-				this.currentPowerup = powerup1;
 				this.powerup1Active = true;
 				var lastSeg = this.snakeBody.pop(); // make this more DRY
 				$(posToId([lastSeg[0],lastSeg[1]])).toggleClass(this.snakeCSS); // Remove final segment of snake
@@ -278,10 +280,13 @@ $(document).ready(function() {
 						this.powerupTimer = 0;
 					}
 				}
+				if (powerup2.powerType!=="shrink") {
+					this.currentPowerup = powerup2;
+				}
+				console.log(this.powerupTimer); // REMOVE THIS!!!!!!!!!!!!
 				$(posToId(powerup2.position)).toggleClass(powerup2.powerType);
 				powerup2.activatePowerup(this);
 				removeFromBoard(powerup2.position);
-				this.currentPowerup = powerup2;
 				this.powerup2Active = true;
 				var lastSeg = this.snakeBody.pop();
 				$(posToId([lastSeg[0],lastSeg[1]])).toggleClass(this.snakeCSS); // Remove final segment of snake
@@ -441,6 +446,8 @@ $(document).ready(function() {
 						}
 					}
 
+					console.log(self.powerupTimer);
+
 					if (self.powerupTimer>=6000) {
 						self.powerup1Active = false;
 						self.powerup2Active = false;
@@ -501,7 +508,7 @@ $(document).ready(function() {
 		};
 		 
 		var types = ["speed","invincible","shrink"];
-		var weight = [0.5, 0.5, 0.0];  // [0.45, 0.45, 0.1];
+		var weight = [0.33, 0.33, 0.33];  // [0.45, 0.45, 0.1];
 		var weighedList = this.generateWeighedList(types, weight);
 
 		this.generatePowerup = function() {
@@ -542,7 +549,7 @@ $(document).ready(function() {
 			}
 		}
 
-		this.deactivatePowerup = function(snake,flag) {
+		this.deactivatePowerup = function(snake,timeoutFlag) {
 			switch (this.powerType) {
 				case "speed":
 					snake.loopTime = 100;
@@ -561,7 +568,7 @@ $(document).ready(function() {
 						$(posToId(snake.snakeBody[i])).removeClass(snake.snakeCSS)
 						$(posToId(snake.snakeBody[i])).addClass(regularCSS);
 					}
-					if (flag===false) {
+					if (timeoutFlag===false) {
 						$(posToId(snake.snakeBody[0])).toggleClass(regularCSS);
 					}
 					snake.snakeCSS = regularCSS;
