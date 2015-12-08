@@ -14,13 +14,22 @@ $(document).ready(function() {
 		}
 	}
 
+	var loaded = false;
+
 	$("#startbutton").click(function(e){
-		// Wait until table is loaded
-		$("#board").waitUntilExists(startGame);
+		$("#time").html('2:00');
+		$("#topbar").css("visibility","visible");
+		if (loaded) {
+			startGame();
+		} else {
+			$("#board").waitUntilExists(startGame);
+		}
 		$("#startscreen").css("visibility","hidden");
+		loaded = true;
 	});
 
 	$("#restartbutton").click(function(e){
+		$("#time").html('2:00');
 		$("#endscreen").css("visibility","hidden");
 		$("td").removeClass();
 		startGame();
@@ -29,6 +38,7 @@ $(document).ready(function() {
 
 	$("#menubutton").click(function(e){
 		$("#endscreen").css("visibility","hidden");
+		$("#topbar").css("visibility","hidden");
 		$("td").removeClass();
 		$("#startscreen").css("visibility","visible");
 	});
@@ -80,6 +90,14 @@ $(document).ready(function() {
 			if (--timer < 0) {
 				gameRunning = false;
 				timeUp = true;
+				if (snake1.score>snake2.score) {
+					winner = "1";
+				} else if (snake1.score<snake2.score) {
+					winner = "2";
+				} else {
+					winner = "draw";
+				}
+				clearInterval(timerInterval);
 				displayEndScreen();
 			}
 		}, 1000);
@@ -89,8 +107,10 @@ $(document).ready(function() {
 	function displayEndScreen() {
 		if (winner==="none") {
 			$("#winner").html("No winner");
+		} else if (winner==="draw") {
+			$("#winner").html("Draw")
 		} else {
-			$("#winner").html("Player " + winner + " wins!");
+			$("#winner").html("Player " + winner + " wins");
 		}
 		$("#endscreen").css("visibility","visible");
 	}
@@ -371,6 +391,8 @@ $(document).ready(function() {
 					self.updateSegments(nextX,nextY);
 
 				} else {
+					$(posToId(self.snakeBody[0])).removeClass();
+					$(posToId(self.snakeBody[0])).addClass("crash"); // Show collision
 					setTimeout(function() {
 						if (snake1.losingMove && snake2.losingMove) {
 							clearInterval(timerInterval);
@@ -473,7 +495,7 @@ $(document).ready(function() {
 		};
 		 
 		var types = ["speed","invincible","shrink"];
-		var weight = [0.45, 0.45, 0.1];
+		var weight = [0.3, 0.3, 0.4];  // [0.45, 0.45, 0.1];
 		var weighedList = this.generateWeighedList(types, weight);
 
 		this.generatePowerup = function() {
@@ -498,7 +520,7 @@ $(document).ready(function() {
 						var reducedLength = Math.floor(snake.snakeLength/2);
 						for (i=0; i<reducedLength; i++) {
 							var lastSeg = snake.snakeBody.pop();
-							$(posToId([lastSeg[0],lastSeg[1]])).toggleClass(snake.snakeCSS);
+							$(posToId([lastSeg[0],lastSeg[1]])).removeClass();
 							snake.snakeLength--;
 						}
 					}
@@ -587,8 +609,10 @@ $(document).ready(function() {
 	// Set up snakes, food and power-ups
 	function startGame() {
 
+		console.log("started");
+
 		display = document.querySelector('#time');
-		startTimer(119, display);
+		startTimer(3, display);
 
 		placedItems = [];
 

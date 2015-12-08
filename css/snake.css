@@ -54,6 +54,7 @@ body {
 }
 
 #topbar {
+	visibility: hidden;
 	font-family: "ocra";
 	height: 56px;
 	/*border: 1px solid green;*/
@@ -115,11 +116,11 @@ body {
 	margin-bottom: 0;
 	margin-top: 8px;
 	font-size: 25px;
-	color: #DD0011;
+	color: #f1c40f;
 }
 
 #startscreen {
-	border: 1px solid white;
+	/*border: 1px solid white;*/
 	visibility: visible;
 	position: absolute;
 	z-index:1000;
@@ -129,6 +130,7 @@ body {
 	margin-right:auto;
 	font-family: "ocra";
 	text-align: center;
+	margin-top: 80px;
 }
 
 #title {
@@ -147,10 +149,15 @@ body {
 	border: solid 1px white;
 	border-radius: 5px;
 	background-color: Transparent;
+	font-family: 'Play', sans-serif;
 }
 
 .button:hover {
-	background-color: rgba(89, 89, 89, 0.7);
+	/*background-color: rgba(89, 89, 89, 0.7);*/
+	-webkit-box-shadow: 0 0 5px 2px #ffffff;
+	-moz-box-shadow: 0 0 5px 2px #ffffff;
+	box-shadow: 0 0 5px 2px #ffffff, 0 0 5px 2px #ffffff inset;
+	text-shadow: 0 1px 1px rgba(0,0,0,.3);
 }
 
 .button:focus {outline:0;}
@@ -190,7 +197,7 @@ p#winner {
 }
 
 .snake2 {
-	background: #DD0011;
+	background: #f1c40f;
 }
 
 
@@ -226,4 +233,8 @@ p#winner {
 	background: url(../img/shield.svg);
 	background-size: 15px;
 	background-repeat: no-repeat;
+}
+
+.crash {
+	background: red;
 }
