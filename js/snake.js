@@ -16,32 +16,7 @@ $(document).ready(function() {
 
 	var loaded = false;
 
-	$("#startbutton").click(function(e){
-		$("#time").html('2:00');
-		$("#topbar").css("visibility","visible");
-		if (loaded) {
-			startGame();
-		} else {
-			$("#board").waitUntilExists(startGame);
-		}
-		$("#startscreen").css("visibility","hidden");
-		loaded = true;
-	});
 
-	$("#restartbutton").click(function(e){
-		$("#time").html('2:00');
-		$("#endscreen").css("visibility","hidden");
-		$("td").removeClass();
-		startGame();
-	});
-
-
-	$("#menubutton").click(function(e){
-		$("#endscreen").css("visibility","hidden");
-		$("#topbar").css("visibility","hidden");
-		$("td").removeClass();
-		$("#startscreen").css("visibility","visible");
-	});
 
 
 	var container = document.getElementById("screen");
@@ -75,6 +50,46 @@ $(document).ready(function() {
 	var timeUp = false;
 
 	var timerInterval;
+
+	$("#startbutton").click(function(e){
+		$("#time").html('2:00');
+		$("#topbar").css("visibility","visible");
+		if (loaded) {
+			startGame();
+		} else {
+			$("#board").waitUntilExists(startGame);
+		}
+		$("#startscreen").css("visibility","hidden");
+		loaded = true;
+	});
+
+	$("#restartbutton").click(function(e){
+		snake1 = null;
+		snake2 = null
+		food1 = null;
+		food2 = null;
+		powerup1 = null;
+		powerup2 = null;
+		$("#time").html('2:00');
+		$("#endscreen").css("visibility","hidden");
+		$("td").removeClass();
+		startGame();
+	});
+
+
+	$("#menubutton").click(function(e){
+		snake1 = null;
+		snake2 = null
+		food1 = null;
+		food2 = null;
+		powerup1 = null;
+		powerup2 = null;
+		$("#endscreen").css("visibility","hidden");
+		$("#topbar").css("visibility","hidden");
+		$("td").removeClass();
+		$("#startscreen").css("visibility","visible");
+		timeUp = false;
+	});
 
 	function startTimer(duration, display) {
 		var timer = duration, minutes, seconds;
@@ -260,12 +275,11 @@ $(document).ready(function() {
 				}
 				if (powerup1.powerType!=="shrink") {
 					this.currentPowerup = powerup1;
+					this.powerup1Active = true;
 				}
-				console.log(this.powerupTimer); // REMOVE THIS!!!!!!!!!!!!
 				$(posToId(powerup1.position)).toggleClass(powerup1.powerType);
 				powerup1.activatePowerup(this);
 				removeFromBoard(powerup1.position);
-				this.powerup1Active = true;
 				var lastSeg = this.snakeBody.pop(); // make this more DRY
 				$(posToId([lastSeg[0],lastSeg[1]])).toggleClass(this.snakeCSS); // Remove final segment of snake
 				powerup1.position = "";
@@ -282,12 +296,11 @@ $(document).ready(function() {
 				}
 				if (powerup2.powerType!=="shrink") {
 					this.currentPowerup = powerup2;
+					this.powerup2Active = true;
 				}
-				console.log(this.powerupTimer); // REMOVE THIS!!!!!!!!!!!!
 				$(posToId(powerup2.position)).toggleClass(powerup2.powerType);
 				powerup2.activatePowerup(this);
 				removeFromBoard(powerup2.position);
-				this.powerup2Active = true;
 				var lastSeg = this.snakeBody.pop();
 				$(posToId([lastSeg[0],lastSeg[1]])).toggleClass(this.snakeCSS); // Remove final segment of snake
 				powerup2.position = "";
@@ -446,8 +459,6 @@ $(document).ready(function() {
 						}
 					}
 
-					console.log(self.powerupTimer);
-
 					if (self.powerupTimer>=6000) {
 						self.powerup1Active = false;
 						self.powerup2Active = false;
@@ -457,7 +468,7 @@ $(document).ready(function() {
 					self.powerupTimer += self.loopTime;
 				}
 
-				if (gameRunning===true && player!=="2") { // for testing purposes
+				if (gameRunning===true /*&& player!=="2"*/) { // for testing purposes
 					self.move();
 				}
 			}, self.loopTime);
@@ -508,7 +519,7 @@ $(document).ready(function() {
 		};
 		 
 		var types = ["speed","invincible","shrink"];
-		var weight = [0.33, 0.33, 0.33];  // [0.45, 0.45, 0.1];
+		var weight = [0.45, 0.45, 0.1];  // [0.45, 0.45, 0.1];
 		var weighedList = this.generateWeighedList(types, weight);
 
 		this.generatePowerup = function() {
@@ -526,7 +537,7 @@ $(document).ready(function() {
 		this.activatePowerup = function(snake) {
 			switch (this.powerType) {
 				case "speed":
-					snake.loopTime -= 50;
+					snake.loopTime -= 45;
 					break;
 				case "shrink":
 					if (snake.snakeLength > 4) {
