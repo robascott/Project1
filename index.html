@@ -30,25 +30,58 @@
 
 		<div id="screen">
 			<div id="overlay"></div>
+			
 			<div id="startscreen">
 				<p id="title">Xtreme Snake</p>
 				<input id="startbutton1" class="button" type="button" value="START &#10; 1P">
 				<input id="startbutton2" class="button" type="button" value="START &#10; 2P">
-				<input id="instructionsbutton" type="button" class="button" value="HOW TO PLAY">
+				<input id="howtobutton" type="button" class="button" value="HOW TO PLAY">
 			</div>
 			
-
 			<div id="endscreen">
 				<p id="gameover">Game Over<p>
 				<p id="winner">wins</p>
 				<input id="restartbutton" class="button" type="button" value="RESTART">
 				<input id="menubutton" class="button" type="button" value="MENU">
 			</div>
-			<!-- Table goes here -->
+
+			<div id="howto">
+
+				<p id="controlstitle">Controls</p>
+
+				<p>Player 1: <span style="color: #00FFFF">WASD</span> keys<p>
+				<p>Player 2: <span style="color: #f1c40f">IJKL</span> keys</p>
+				<img id="apple" src="img/apple_orig.png"><p id="appleinfo">Pick up apples to increase your score</p>
+
+				<p id="poweruptitle">Power-ups</p>
+
+				<div id="powerupcontainer">
+
+					<div id="powerupimages">
+						<img id="lightning" src="img/speed.svg">
+						<img id="shield" src="img/shield.svg">
+						<img id="scissors" src="img/scissors.svg">
+					</div>
+
+					<div id="powerupinfo">
+						<p>Temporary speed boost</p>
+						<p>Temporary invincibility</p>
+						<p>Reduces snake's length by half</p>
+					</div>
+
+				</div>
+
+				<div id="clear"></div>
+
+				<input id="backbutton" class="button" type="button" value="MENU">
+			</div>
+
+			<!-- Board gets inserted here -->
+
 		</div>
 
 		<div id="clear"></div>
-		
+
 	</div>
 
 </body>

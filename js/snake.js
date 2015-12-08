@@ -47,6 +47,16 @@ $(document).ready(function() {
 
 	// Event listeners
 
+	$("#howtobutton").click(function(e){
+		$("#startscreen").css("visibility","hidden");
+		$("#howto").css("visibility","visible");
+	});
+
+	$("#backbutton").click(function(e){
+		$("#howto").css("visibility","hidden");
+		$("#startscreen").css("visibility","visible");
+	});
+
 	$("#startbutton2").click(function(e){
 		mode = "two";
 		$("#time").html('2:00');

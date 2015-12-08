@@ -140,7 +140,6 @@ body {
 }
 
 .button:hover {
-	/*background-color: rgba(89, 89, 89, 0.7);*/
 	-webkit-box-shadow: 0 0 5px 2px #ffffff;
 	-moz-box-shadow: 0 0 5px 2px #ffffff;
 	box-shadow: 0 0 5px 2px #ffffff, 0 0 5px 2px #ffffff inset;
@@ -154,7 +153,6 @@ body {
 }
 
 #endscreen {
-	/*border: 1px solid white;*/
 	visibility: hidden;
 	position: absolute;
 	z-index:1000;
@@ -164,6 +162,69 @@ body {
 	margin-left:auto;
 	margin-right:auto;
 	font-family: "ocra";
+}
+
+#howto {
+	visibility: hidden;
+	position: absolute;
+	z-index:1000;
+	text-align: center;
+	left:0;
+	right:0;
+	margin-left:auto;
+	margin-right:auto;
+	font-family: "ocra";
+	margin-top: 40px;
+}
+
+#powerupcontainer {
+	position: relative;
+	margin: 0 auto;
+	left: 90px;
+	width: 500px;
+}
+
+#appleinfo {
+	display: inline-block;
+}
+
+#poweruptitle, #controlstitle {
+	font-size: 20px;
+	color: #e74c3c;
+	margin-bottom: 5px;
+}
+
+#powerupimages {
+	float: left;
+}
+
+#powerupimages img {
+	display: block;
+	width: 19px;
+	margin: 10px;
+}
+
+#powerupinfo {
+	float: left;
+}
+
+#powerupinfo p {
+	margin: 12px;
+	text-align: left;
+}
+
+#apple {
+	position: relative;
+	top: 5px;
+	width: 25px;
+	display: inline-block;
+	margin-right: 15px;
+}
+
+#backbutton {
+	display: block;
+	margin: 0 auto;
+	margin-top: 30px;
 }
 
 p#gameover {
