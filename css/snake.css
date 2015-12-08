@@ -33,6 +33,7 @@ body {
 	position: relative;
 	overflow: hidden;
 	margin: 0 auto;
+	/*border: 1px solid white;*/
 }
 
 #board {
@@ -56,6 +57,8 @@ body {
 	font-family: "ocra";
 	height: 80px;
 	/*border: 1px solid green;*/
+	margin-left: auto;
+	margin-right: auto;
 	position: relative;
 }
 

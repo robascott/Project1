@@ -34,6 +34,8 @@ $(document).ready(function() {
 	$("#screen").css("max-width",width+60);
 	$("#screen").css("height",height+60);
 
+	$("#topbar").css("width",width+60);
+
 	var screenWidth = screenBox.offsetWidth;
 	var screenHeight = screenBox.offsetHeight;
 
@@ -44,6 +46,8 @@ $(document).ready(function() {
 
 	var gameRunning = false;
 	var winner;
+
+	var timeUp = false;
 
 	var timerInterval;
 
@@ -59,7 +63,8 @@ $(document).ready(function() {
 			display.textContent = minutes + ":" + seconds;
 
 			if (--timer < 0) {
-				timer = duration;
+				gameRunning = false;
+				timeUp = true;
 			}
 		}, 1000);
 	}
