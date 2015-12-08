@@ -20,7 +20,7 @@ body {
 	opacity: 0.3;
 	width: 100%;
 	height: 100%;
-	z-index: 9999;
+	z-index: 500;
 }
 
 #boardcontainer {
@@ -116,6 +116,28 @@ body {
 	margin-top: 8px;
 	font-size: 25px;
 	color: #DD0011;
+}
+
+
+#endscreen {
+	/*border: 1px solid white;*/
+	visibility: hidden;
+	position: absolute;
+	z-index:1000;
+	text-align: center;
+	left:0;
+	right:0;
+	margin-left:auto;
+	margin-right:auto;
+	font-family: "ocra";
+}
+
+p#gameover {
+	font-size: 60px;
+}
+
+p#winner {
+	font-size: 40px;
 }
 
 

@@ -65,8 +65,19 @@ $(document).ready(function() {
 			if (--timer < 0) {
 				gameRunning = false;
 				timeUp = true;
+				displayEndScreen();
 			}
 		}, 1000);
+	}
+
+
+	function displayEndScreen() {
+		if (winner==="none") {
+			$("#winner").html("Both players lose");
+		} else {
+			$("#winner").html("Player " + winner + " wins!");
+		}
+		$("#endscreen").css("visibility","visible");
 	}
 
 
@@ -349,12 +360,15 @@ $(document).ready(function() {
 						if (snake1.losingMove && snake2.losingMove) {
 							clearInterval(timerInterval);
 							console.log("No winner");
+							winner = "none";
 							gameRunning = false;
+							displayEndScreen();
 						} else {
 							clearInterval(timerInterval);
 							console.log("Game over");
 							console.log("Player " + winner + " wins!");
 							gameRunning = false;
+							displayEndScreen();
 						}
 					},100)
 				}
@@ -512,9 +526,9 @@ $(document).ready(function() {
 
 
 	function generatePosition() {
-		var pos = [(Math.floor(Math.random() * columns-1)),(Math.floor(Math.random() * rows-1))];
+		var pos = [(Math.floor(Math.random() * (columns-2-1+1)) + 1),(Math.floor(Math.random() * (rows-2-1+1)) + 1)];
 		while (snake1.checkOverlap(pos) || snake2.checkOverlap(pos) || isItemInArray(placedItems,pos)) {  // To avoid placing food on top of snakes
-			pos = [(Math.floor(Math.random() * columns-1)),(Math.floor(Math.random() * rows-1))];
+			pos = [(Math.floor(Math.random() * (columns-2-1+1)) + 1),(Math.floor(Math.random() * (rows-2-1+1)) + 1)];
 		}
 		return pos;
 	}
