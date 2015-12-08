@@ -51,6 +51,9 @@ $(document).ready(function() {
 
 	var timerInterval;
 
+
+	// Event listeners
+
 	$("#startbutton2").click(function(e){
 		$("#time").html('2:00');
 		$("#topbar").css("visibility","visible");
@@ -165,16 +168,13 @@ $(document).ready(function() {
 		if (player==="1") {
 			var opponent = "2";
 			this.snakeCSS = "snake1";
-			for (i=this.snakeLength-2;i>=0;i--) {  // Build snake
-				this.snakeBody.push([3,i+5]);
-			}
 		} else {
 			var opponent = "1";
 			this.snakeCSS = "snake2";
-			for (i=this.snakeLength-2;i>=0;i--) {  // Build snake
-				this.snakeBody.push([27,i+5]);
-			}
-		}	
+		}
+		for (i=this.currY-1; i>this.currY-this.snakeLength;i--) {  // Build snake
+			this.snakeBody.push([this.currX,i]);
+		}
 
 		for (i=0; i<this.snakeLength; i++) {  // Colour snake
 			var segment = this.snakeBody[i];
@@ -253,7 +253,7 @@ $(document).ready(function() {
 			var powerupPos1 = powerup1.position.toString();
 			var powerupPos2 = powerup2.position.toString();
 			this.snakeBody.unshift([this.currX,this.currY]);
-			if (currentPos===foodPos1) {  // When snake passes over food
+			if (currentPos===foodPos1) {
 				$(posToId(food1.position)).toggleClass("food");
 				removeFromBoard(food1.position);
 				food1.generateFood();
@@ -267,11 +267,11 @@ $(document).ready(function() {
 				this.score += 10;
 				this.updateScore();
 				this.snakeLength++;
-			} else if (currentPos===powerupPos1 /*&& !this.powerup1Active*/) {  // what about powerup1 then powerup1 again
+			} else if (currentPos===powerupPos1 /*&& !this.powerup1Active*/) {
 				if (this.powerup2Active) {
 					if (powerup1.powerType!=="shrink") {
 						powerup2.deactivatePowerup(this,false);
-						this.powerup2Active = false; // added
+						this.powerup2Active = false;
 						this.powerupTimer = 0;
 					}
 				}
@@ -292,7 +292,7 @@ $(document).ready(function() {
 				if (this.powerup1Active) {
 					if (powerup2.powerType!=="shrink") {
 						powerup1.deactivatePowerup(this,false);
-						this.powerup1Active = false; // added
+						this.powerup1Active = false;
 						this.powerupTimer = 0;
 					}
 				}
@@ -511,11 +511,9 @@ $(document).ready(function() {
 		this.generateWeighedList = function(list, weight) {
 			var weighed_list = [];
 
-		  // Loop over weights
 		  for (var i = 0; i < weight.length; i++) {
 		  	var multiples = weight[i] * 100;
 
-		    // Loop over the list of items
 		    for (var j = 0; j < multiples; j++) {
 		    	weighed_list.push(list[i]);
 		    }
@@ -529,7 +527,6 @@ $(document).ready(function() {
 
 		this.generatePowerup = function() {
 			if (gameRunning===true) {
-				//var rand = types[((Math.random() * (2 - 0 + 1) ) << 0)];
 				var randomNum = this.rand(0, weighedList.length-1);
 				var rand = weighedList[randomNum]
 				this.powerType = rand;
@@ -602,12 +599,6 @@ $(document).ready(function() {
 		return pos;
 	}
 
-
-	function idToPos(id) {  // Not needed atm
-		var splitPos = idString.split("-");
-		return [parseInt(splitPos[0]),parseInt(splitPos[1])];
-	}
-
 	function posToId(pos) {
 		return "#" + pos[0] + "-" + pos[1];
 	}
@@ -630,7 +621,7 @@ $(document).ready(function() {
 		console.log("Error: not found");
 	}
 
-	function removeFromBoard(pos) { // not working
+	function removeFromBoard(pos) {
 		index = findIndex(placedItems,pos);
 		if (index > -1) {
 		    placedItems.splice(index, 1);
@@ -648,9 +639,9 @@ $(document).ready(function() {
 
 		placedItems = [];
 
-		snake1 = new Snake([3,12],"1");
+		snake1 = new Snake([4,10],"1");
 
-		snake2 = new Snake([27,12],"2");
+		snake2 = new Snake([45,10],"2");
 
 		food1 = new Food();
 		food2 = new Food();
