@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+	<link href='https://fonts.googleapis.com/css?family=Orbitron:500' rel='stylesheet' type='text/css'>
 	<script type="text/javascript" src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
 	<script type="text/javascript" src="js/waituntilexists.js"></script>
 	<script type="text/javascript" src="js/snake.js"></script>
@@ -28,9 +29,18 @@
 
 		<div id="screen">
 			<div id="overlay"></div>
+			<div id="startscreen">
+				<p id="title">Xtreme Snake</p>
+				<input id="startbutton" class="button" type="button" value="Start">
+				<input id="instructionsbutton" type="button" class="button" value="How to play">
+			</div>
+			
+
 			<div id="endscreen">
 				<p id="gameover">Game Over<p>
 				<p id="winner">wins</p>
+				<input id="restartbutton" class="button" type="button" value="Restart">
+				<input id="menubutton" class="button" type="button" value="Menu">
 			</div>
 			<!-- Table goes here -->
 		</div>

@@ -118,6 +118,43 @@ body {
 	color: #DD0011;
 }
 
+#startscreen {
+	border: 1px solid white;
+	visibility: visible;
+	position: absolute;
+	z-index:1000;
+	left:0;
+	right:0;
+	margin-left:auto;
+	margin-right:auto;
+	font-family: "ocra";
+	text-align: center;
+}
+
+#title {
+	font-size: 60px;
+	font-family: 'Orbitron', sans-serif;
+}
+
+.button {
+	width: 150px;
+	height: 50px;
+	color: white;
+	font-size: 15px;
+	text-align: center;
+	vertical-align: text-top;
+	text-decoration: none;
+	border: solid 1px white;
+	border-radius: 5px;
+	background-color: Transparent;
+}
+
+.button:hover {
+	background-color: rgba(89, 89, 89, 0.7);
+}
+
+.button:focus {outline:0;}
+
 
 #endscreen {
 	/*border: 1px solid white;*/

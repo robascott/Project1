@@ -14,9 +14,24 @@ $(document).ready(function() {
 		}
 	}
 
+	$("#startbutton").click(function(e){
+		// Wait until table is loaded
+		$("#board").waitUntilExists(startGame);
+		$("#startscreen").css("visibility","hidden");
+	});
 
-	// Wait until table is loaded
-	$("#board").waitUntilExists(startGame);
+	$("#restartbutton").click(function(e){
+		$("#endscreen").css("visibility","hidden");
+		$("td").removeClass();
+		startGame();
+	});
+
+
+	$("#menubutton").click(function(e){
+		$("#endscreen").css("visibility","hidden");
+		$("td").removeClass();
+		$("#startscreen").css("visibility","visible");
+	});
 
 
 	var container = document.getElementById("screen");
@@ -73,7 +88,7 @@ $(document).ready(function() {
 
 	function displayEndScreen() {
 		if (winner==="none") {
-			$("#winner").html("Both players lose");
+			$("#winner").html("No winner");
 		} else {
 			$("#winner").html("Player " + winner + " wins!");
 		}
