@@ -251,10 +251,13 @@ $(document).ready(function() {
 				this.score += 10;
 				this.updateScore();
 				this.snakeLength++;
-			} else if (currentPos===powerupPos1 && !this.powerup1Active) {  // what about powerup1 then powerup1 again
+			} else if (currentPos===powerupPos1 /*&& !this.powerup1Active*/) {  // what about powerup1 then powerup1 again
 				if (this.powerup2Active) {
-					powerup2.deactivatePowerup(this);
-					this.powerupTime = 0;
+					if (powerup1.powerType!=="shrink") {
+						powerup2.deactivatePowerup(this,false);
+						this.powerup2Active = false; // added
+						this.powerupTimer = 0;
+					}
 				}
 				$(posToId(powerup1.position)).toggleClass(powerup1.powerType);
 				powerup1.activatePowerup(this);
@@ -267,10 +270,13 @@ $(document).ready(function() {
 				setTimeout(function() {
 					powerup1.generatePowerup()
 				},10000);
-			} else if (currentPos===powerupPos2 && !this.powerup2Active) {
+			} else if (currentPos===powerupPos2 /*&& !this.powerup2Active*/) {
 				if (this.powerup1Active) {
-					powerup1.deactivatePowerup(this);
-					this.powerupTimer = 0;
+					if (powerup2.powerType!=="shrink") {
+						powerup1.deactivatePowerup(this,false);
+						this.powerup1Active = false; // added
+						this.powerupTimer = 0;
+					}
 				}
 				$(posToId(powerup2.position)).toggleClass(powerup2.powerType);
 				powerup2.activatePowerup(this);
@@ -438,7 +444,7 @@ $(document).ready(function() {
 					if (self.powerupTimer>=6000) {
 						self.powerup1Active = false;
 						self.powerup2Active = false;
-						self.currentPowerup.deactivatePowerup(self);
+						self.currentPowerup.deactivatePowerup(self,true);
 						self.powerupTimer = 0;
 					}
 					self.powerupTimer += self.loopTime;
@@ -495,7 +501,7 @@ $(document).ready(function() {
 		};
 		 
 		var types = ["speed","invincible","shrink"];
-		var weight = [0.3, 0.3, 0.4];  // [0.45, 0.45, 0.1];
+		var weight = [0.5, 0.5, 0.0];  // [0.45, 0.45, 0.1];
 		var weighedList = this.generateWeighedList(types, weight);
 
 		this.generatePowerup = function() {
@@ -536,7 +542,7 @@ $(document).ready(function() {
 			}
 		}
 
-		this.deactivatePowerup = function(snake) {
+		this.deactivatePowerup = function(snake,flag) {
 			switch (this.powerType) {
 				case "speed":
 					snake.loopTime = 100;
@@ -554,6 +560,9 @@ $(document).ready(function() {
 					for (i=0; i<snake.snakeBody.length; i++) {
 						$(posToId(snake.snakeBody[i])).removeClass(snake.snakeCSS)
 						$(posToId(snake.snakeBody[i])).addClass(regularCSS);
+					}
+					if (flag===false) {
+						$(posToId(snake.snakeBody[0])).toggleClass(regularCSS);
 					}
 					snake.snakeCSS = regularCSS;
 
@@ -612,7 +621,7 @@ $(document).ready(function() {
 		console.log("started");
 
 		display = document.querySelector('#time');
-		startTimer(3, display);
+		startTimer(119, display);
 
 		placedItems = [];
 
