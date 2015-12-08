@@ -162,6 +162,10 @@ body {
 
 .button:focus {outline:0;}
 
+#startbutton1, #startbutton2 {
+	width: 75px;
+}
+
 
 #endscreen {
 	/*border: 1px solid white;*/

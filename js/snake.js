@@ -16,7 +16,7 @@ $(document).ready(function() {
 
 	var loaded = false;
 
-
+	var endScreenShown = false;
 
 
 	var container = document.getElementById("screen");
@@ -51,7 +51,7 @@ $(document).ready(function() {
 
 	var timerInterval;
 
-	$("#startbutton").click(function(e){
+	$("#startbutton2").click(function(e){
 		$("#time").html('2:00');
 		$("#topbar").css("visibility","visible");
 		if (loaded) {
@@ -70,6 +70,7 @@ $(document).ready(function() {
 		food2 = null;
 		powerup1 = null;
 		powerup2 = null;
+		endScreenShown = false;
 		$("#time").html('2:00');
 		$("#endscreen").css("visibility","hidden");
 		$("td").removeClass();
@@ -84,6 +85,7 @@ $(document).ready(function() {
 		food2 = null;
 		powerup1 = null;
 		powerup2 = null;
+		endScreenShown = false;
 		$("#endscreen").css("visibility","hidden");
 		$("#topbar").css("visibility","hidden");
 		$("td").removeClass();
@@ -127,7 +129,7 @@ $(document).ready(function() {
 		} else {
 			$("#winner").html("Player " + winner + " wins");
 		}
-		$("#endscreen").css("visibility","visible");
+		$('#endscreen').css('visibility','visible').hide().fadeIn('slow');
 	}
 
 
@@ -423,7 +425,10 @@ $(document).ready(function() {
 							console.log("No winner");
 							winner = "none";
 							gameRunning = false;
-							displayEndScreen();
+							if (endScreenShown!==true) {
+								displayEndScreen();
+								endScreenShown = true;
+							}
 						} else {
 							clearInterval(timerInterval);
 							console.log("Game over");
