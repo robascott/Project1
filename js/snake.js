@@ -49,12 +49,28 @@ $(document).ready(function() {
 
 	var timeUp = false;
 
+	var mode;
+
 	var timerInterval;
 
 
 	// Event listeners
 
 	$("#startbutton2").click(function(e){
+		mode = "two";
+		$("#time").html('2:00');
+		$("#topbar").css("visibility","visible");
+		if (loaded) {
+			startGame();
+		} else {
+			$("#board").waitUntilExists(startGame);
+		}
+		$("#startscreen").css("visibility","hidden");
+		loaded = true;
+	});
+
+	$("#startbutton1").click(function(e){
+		mode = "one";
 		$("#time").html('2:00');
 		$("#topbar").css("visibility","visible");
 		if (loaded) {
@@ -473,16 +489,21 @@ $(document).ready(function() {
 					self.powerupTimer += self.loopTime;
 				}
 
-				if (gameRunning===true /*&& player!=="2"*/) { // for testing purposes
+				if (gameRunning===true) { // for testing purposes
 					self.move();
 				}
+		
 			}, self.loopTime);
 
 		}
 
 		gameRunning = true;
 
-		this.move();
+		if (mode==="one" && this.player==="2") {
+			// do nothing
+		} else {
+			this.move();
+		}
 
 	}
 
@@ -640,8 +661,12 @@ $(document).ready(function() {
 		placedItems = [];
 
 		snake1 = new Snake([4,10],"1");
-
-		snake2 = new Snake([45,10],"2");
+		if (mode==="two") {
+			snake2 = new Snake([45,10],"2");
+		} else {
+			snake2 = new Snake([-1,-1],"2");
+		}
+		
 
 		food1 = new Food();
 		food2 = new Food();
