@@ -91,6 +91,7 @@ $(document).ready(function() {
 		powerup1 = null;
 		powerup2 = null;
 		endScreenShown = false;
+		$("#board").removeClass();
 		$('#p1scoreno').html("0");
 		$('#p2scoreno').html("0");
 		$("#time").html('2:00');
@@ -107,6 +108,7 @@ $(document).ready(function() {
 		powerup1 = null;
 		powerup2 = null;
 		endScreenShown = false;
+		$("#board").removeClass();
 		$("#p2scorebox").css("visibility","");
 		$('#p1scoreno').html("0");
 		$('#p2scoreno').html("0");
@@ -160,7 +162,7 @@ $(document).ready(function() {
 				$("#winner").html("Player " + winner + " wins");
 			}
 		}
-		$('#endscreen').css('visibility','visible').hide().fadeIn('slow');
+		$('#endscreen').css('visibility','visible').hide().fadeIn(1400);
 	}
 
 
@@ -444,6 +446,7 @@ $(document).ready(function() {
 				} else {
 					$(posToId(self.snakeBody[0])).removeClass();
 					$(posToId(self.snakeBody[0])).addClass("crash"); // Show collision
+					$("#board").addClass('board-gameover');
 					setTimeout(function() {
 						if (snake1.losingMove && snake2.losingMove) {
 							clearInterval(timerInterval);
@@ -584,7 +587,7 @@ $(document).ready(function() {
 				case "invincible":
 					snake.invincible = true;
 					for (i=0; i<snake.snakeBody.length; i++) {
-						$(posToId(snake.snakeBody[i])).removeClass(snake.snakeCSS)
+						$(posToId(snake.snakeBody[i])).removeClass(snake.snakeCSS);
 						$(posToId(snake.snakeBody[i])).toggleClass("invincibleSnake");
 					}
 					$(posToId(snake.snakeBody[0])).toggleClass("invincibleSnake");
