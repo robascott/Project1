@@ -6,23 +6,12 @@ You can play it [here](http://www.robins.me/Snake).
 
 <img src="img/screenshot.png" width="600px"></img>
 
+
 ## Functionality
 
-Players control their snake with the keyboard. The aim is to accumulate as many points as possible (by eating apples) before the timer runs out. In 2-player mode, colliding with a wall or snake results in a victory for the opposing player.
+Players use the keyboard to control their snake. The aim is to accumulate as many points as possible (by eating apples) before the timer runs out. In 2-player mode, colliding with a wall or snake results in a victory for the opposing player.
 
-There are three power-ups. Lightning gives the player a temporary speed boost. The shield allows the player to pass over his or her own snake for a limited amount of time. Scissors reduce the length of the player's snake.
-
-## Technologies and Resources
-
-* HTML
-* CSS
-* JavaScript
-* jQuery
-* Icons from [Flaticon](http://www.flaticon.com/)
-* Fonts:
-  * OCR-A Extended
-  * Orbitron
-  * Play
+There are three power-ups: **lightning** gives the player a temporary speed boost; **shield** allows the player to pass over his or her own snake for a limited amount of time; and **scissors** reduces the length of the player's snake.
 
 
 ## Approach
@@ -34,10 +23,23 @@ The board is represented by an HTML table. CSS classes are applied to specific c
 Apples and power-ups are randomly generated.
 
 
-## Future improvements
+## Technologies and Resources
+
+* HTML
+* CSS
+* JavaScript
+* jQuery
+* Images from [Flaticon](http://www.flaticon.com/)
+* Fonts:
+  * [Orbitron](https://www.google.com/fonts/specimen/Orbitron)
+  * [Play](https://www.google.com/fonts/specimen/Play)
+  * OCR-A Extended
+
+
+## Future plans
 
 * Leaderboard
 * Sound effects
 * Difficulty selection
 * "Survival" mode (no timer)
-* Stop items from spawning too close to each other
+* Improve item distribution
